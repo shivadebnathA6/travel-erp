@@ -104,9 +104,10 @@
         <li>
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="align-justify"></i><span data-key="t-pages">Master Entry</span></a>
          <ul class="sub-menu" aria-expanded="false">
-            <li><a href="hotel-master">Master Hotel</a></li>
-            <li><a href="cab-master">Master Cab</a></li>
-            <li><a href="addon-master">Master Addon</a></li>
+            <li><a href="master-location">Master Location</a></li>
+            <li><a href="master-hotel">Master Hotel</a></li>
+            <li><a href="master-cab">Master Cab</a></li>
+            <li><a href="master-addon">Master Addon</a></li>
 
          </ul>
         </li>
