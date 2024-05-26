@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2024 at 09:33 PM
+-- Generation Time: May 26, 2024 at 04:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,6 +77,51 @@ INSERT INTO `task` (`id`, `title`, `description`, `status`, `due_date`, `user_id
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_addon`
+--
+
+CREATE TABLE `tbl_addon` (
+  `id` int(11) NOT NULL,
+  `addon_name` varchar(250) NOT NULL,
+  `addon_loc` varchar(250) NOT NULL,
+  `addon_ph` varchar(250) NOT NULL,
+  `addon_email` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_addon`
+--
+
+INSERT INTO `tbl_addon` (`id`, `addon_name`, `addon_loc`, `addon_ph`, `addon_email`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(5, 'TRAIN', '', '98867657657', '', '1', '', '2024-05-25', '0000-00-00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_cab`
+--
+
+CREATE TABLE `tbl_cab` (
+  `id` int(11) NOT NULL,
+  `cab_name` varchar(250) NOT NULL,
+  `cab_loc` varchar(250) NOT NULL,
+  `cab_ph` varchar(250) NOT NULL,
+  `cab_email` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_guest`
 --
 
@@ -103,7 +148,188 @@ CREATE TABLE `tbl_guest` (
 
 INSERT INTO `tbl_guest` (`id`, `guest_name`, `guest_phone`, `altphone`, `email`, `country`, `address`, `pincode`, `remarks`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
 (1, 'SHIVA DEBNATH1', '8888888888', '88888888888', 'USYDCFUGVU@GGHV.COM', 'INDIA', 'MATHABHANGA, WEST BENGAL', '734006', 'WTEHBEB', '1', '1', '2024-05-19', '2024-05-19', 1),
-(2, 'SHIVA DEBNATH1', '8888888888', '88888888888', 'USYDCFUGVU@GGHV.COM', 'INDIA', 'MATHABHANGA, WEST BENGAL', '734006', 'WTEHBEB', '1', '1', '2024-05-19', '2024-05-19', 0);
+(2, 'SHIVA DEBNATH1', '8888888888', '88888888888', 'USYDCFUGVU@GGHV.COM', 'INDIA', 'MATHABHANGA, WEST BENGAL', '734006', 'WTEHBEB', '1', '1', '2024-05-19', '2024-05-19', 1),
+(3, 'LAKSHMAN BISWAS', '8927931290', '98987555667', 'BISWAS.LAKSHMAN321@GMAIL.COM', 'INDIA', 'MAYNAGURI', '735224', 'WORK AS BUSINESS TRIP', '1', NULL, '2024-05-25', NULL, 1),
+(4, 'RAMEN DAS', '8987654321', '', 'RRWWE@GMAIL.COM', 'INDIA', 'JALPAIGURI', '735224', 'NIL', '1', NULL, '2024-05-25', NULL, 0),
+(5, '', '', '', '', '', '', '', '', '1', NULL, '2024-05-25', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_hotel`
+--
+
+CREATE TABLE `tbl_hotel` (
+  `id` int(11) NOT NULL,
+  `hotel_name` varchar(250) NOT NULL,
+  `hotel_loc` varchar(250) NOT NULL,
+  `hotel_ph` varchar(250) NOT NULL,
+  `hotel_email` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_hotel`
+--
+
+INSERT INTO `tbl_hotel` (`id`, `hotel_name`, `hotel_loc`, `hotel_ph`, `hotel_email`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(5, 'KOTMATA', 'SIKKIM', '8976544456', '', '1', '', '2024-05-25', '0000-00-00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_leads`
+--
+
+CREATE TABLE `tbl_leads` (
+  `id` int(11) NOT NULL,
+  `guest_id` varchar(250) NOT NULL,
+  `male_pax` varchar(250) NOT NULL DEFAULT '0',
+  `female_pax` varchar(250) NOT NULL DEFAULT '0',
+  `child_pax` varchar(250) NOT NULL DEFAULT '0',
+  `infant_pax` varchar(250) NOT NULL DEFAULT '0',
+  `loc_id` varchar(250) NOT NULL,
+  `remarks` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_leads`
+--
+
+INSERT INTO `tbl_leads` (`id`, `guest_id`, `male_pax`, `female_pax`, `child_pax`, `infant_pax`, `loc_id`, `remarks`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(1, '3', '1', '1', '', '', '4', 'WTEHBEB', '1', '', '2024-05-26', '0000-00-00', 0),
+(2, '4', '4', '', '', '', '4', 'PAID', '1', '', '2024-05-26', '0000-00-00', 0),
+(3, '4', '', '', '', '', '', '', '1', '', '2024-05-26', '0000-00-00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_location`
+--
+
+CREATE TABLE `tbl_location` (
+  `id` int(11) NOT NULL,
+  `location` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_location`
+--
+
+INSERT INTO `tbl_location` (`id`, `location`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(4, 'SIKKIM', '1', '', '2024-05-25', '0000-00-00', 0),
+(5, 'E5E5YRT', '1', '', '2024-05-25', '0000-00-00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_voucher_addon`
+--
+
+CREATE TABLE `tbl_voucher_addon` (
+  `id` int(11) NOT NULL,
+  `addon_id` varchar(250) NOT NULL,
+  `quotation_id` varchar(250) NOT NULL,
+  `date` date NOT NULL,
+  `no_addon` varchar(250) NOT NULL,
+  `cost` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_voucher_addon`
+--
+
+INSERT INTO `tbl_voucher_addon` (`id`, `addon_id`, `quotation_id`, `date`, `no_addon`, `cost`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(1, '5', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 1),
+(2, '5', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(3, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(4, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(5, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(6, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(7, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(8, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(9, '', '', '0000-00-00', '', '', '', '', '0000-00-00', '0000-00-00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_voucher_cab`
+--
+
+CREATE TABLE `tbl_voucher_cab` (
+  `id` int(11) NOT NULL,
+  `cab_id` varchar(250) NOT NULL,
+  `quotation_id` varchar(250) NOT NULL,
+  `date` date NOT NULL,
+  `from` varchar(250) NOT NULL,
+  `to` varchar(250) NOT NULL,
+  `no_cab` varchar(250) NOT NULL,
+  `pax` varchar(250) NOT NULL,
+  `cost` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_voucher_cab`
+--
+
+INSERT INTO `tbl_voucher_cab` (`id`, `cab_id`, `quotation_id`, `date`, `from`, `to`, `no_cab`, `pax`, `cost`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(1, '', '', '0000-00-00', '', '', '', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(2, '', '', '0000-00-00', '', '', '', '', '', '', '', '0000-00-00', '0000-00-00', 0),
+(3, '', '', '0000-00-00', '', '', '', '', '', '', '', '0000-00-00', '0000-00-00', 1),
+(4, '', '', '0000-00-00', '', '', '', '', '', '', '', '0000-00-00', '0000-00-00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_voucher_hotel`
+--
+
+CREATE TABLE `tbl_voucher_hotel` (
+  `id` int(11) NOT NULL,
+  `hotel_id` varchar(250) NOT NULL,
+  `quotation_id` varchar(250) NOT NULL,
+  `checkin` date NOT NULL,
+  `checkout` date NOT NULL,
+  `rooms` varchar(250) NOT NULL,
+  `cost` varchar(250) NOT NULL,
+  `total_amount` varchar(250) NOT NULL,
+  `created_by` varchar(250) NOT NULL,
+  `updated_by` varchar(250) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_voucher_hotel`
+--
+
+INSERT INTO `tbl_voucher_hotel` (`id`, `hotel_id`, `quotation_id`, `checkin`, `checkout`, `rooms`, `cost`, `total_amount`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES
+(1, 'vf  ', '', '0000-00-00', '0000-00-00', 'fv vbb', '', '', 'bv vb vb ', 'cvb ', '0000-00-00', '0000-00-00', 1);
 
 -- --------------------------------------------------------
 
@@ -149,9 +375,57 @@ ALTER TABLE `task`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbl_addon`
+--
+ALTER TABLE `tbl_addon`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_cab`
+--
+ALTER TABLE `tbl_cab`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_guest`
 --
 ALTER TABLE `tbl_guest`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_hotel`
+--
+ALTER TABLE `tbl_hotel`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_leads`
+--
+ALTER TABLE `tbl_leads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_location`
+--
+ALTER TABLE `tbl_location`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_voucher_addon`
+--
+ALTER TABLE `tbl_voucher_addon`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_voucher_cab`
+--
+ALTER TABLE `tbl_voucher_cab`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_voucher_hotel`
+--
+ALTER TABLE `tbl_voucher_hotel`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -177,10 +451,58 @@ ALTER TABLE `task`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `tbl_addon`
+--
+ALTER TABLE `tbl_addon`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_cab`
+--
+ALTER TABLE `tbl_cab`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `tbl_guest`
 --
 ALTER TABLE `tbl_guest`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_hotel`
+--
+ALTER TABLE `tbl_hotel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_leads`
+--
+ALTER TABLE `tbl_leads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbl_location`
+--
+ALTER TABLE `tbl_location`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_voucher_addon`
+--
+ALTER TABLE `tbl_voucher_addon`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `tbl_voucher_cab`
+--
+ALTER TABLE `tbl_voucher_cab`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tbl_voucher_hotel`
+--
+ALTER TABLE `tbl_voucher_hotel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`

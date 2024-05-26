@@ -9,13 +9,12 @@
   if(isset($_POST['submit'])){
     $id = isset($_POST['id']) ? filtervar($mysqli, $_POST['id']) : '';
     $form_action=filtervar($mysqli,$_POST['form_action']);
-$guest_name=filtervar($mysqli,$_POST['guest_name']);
-$guest_phone=filtervar($mysqli,$_POST['guest_phone']);
-$altphone=filtervar($mysqli,$_POST['altphone']);
-$email=filtervar($mysqli,$_POST['email']);
-$country=filtervar($mysqli,$_POST['country']);
-$address=filtervar($mysqli,$_POST['address']);
-$pincode=filtervar($mysqli,$_POST['pincode']);
+$guest_id=filtervar($mysqli,$_POST['guest_id']);
+$male_pax=filtervar($mysqli,$_POST['male_pax']);
+$female_pax=filtervar($mysqli,$_POST['female_pax']);
+$child_pax=filtervar($mysqli,$_POST['child_pax']);
+$infant_pax=filtervar($mysqli,$_POST['infant_pax']);
+$loc_id=filtervar($mysqli,$_POST['loc_id']);
 $remarks=filtervar($mysqli,$_POST['remarks']);
 $user_id=$_SESSION['login']['user_id'];
 $gen_date=input_date(date('d-m-Y'));
@@ -24,29 +23,27 @@ $gen_date=input_date(date('d-m-Y'));
 
 
     
-    $data = "`guest_name` = '$guest_name',
-    `guest_phone` = '$guest_phone',
-    `altphone` = '$altphone',
-    `email` = '$email',
-    `country` = '$country',
-    `address` = '$address',
-    `pincode` = '$pincode',
-    `remarks` = '$remarks',
-         ";
+    $data = "`guest_id` = '$guest_id',
+    `male_pax` = '$male_pax',
+    `female_pax` = '$female_pax',
+    `child_pax` = '$child_pax',
+    `infant_pax` = '$infant_pax',
+    `loc_id` = '$loc_id',
+    `remarks` = '$remarks',";
 
     if($form_action == 'ADD'){
         $data.="`created_by` = '$user_id',`created_at` = '$gen_date'";
-        $query = "INSERT INTO `tbl_guest` SET $data";
+        $query = "INSERT INTO `tbl_leads` SET $data";
       
         $msg = "Successfully Inserted";
     }elseif($form_action == 'UPDATE'){
         $data.="`updated_by` = '$user_id',`updated_at` = '$gen_date'";
-        $query = "UPDATE `tbl_guest` SET $data WHERE `id`='$id'";
+        $query = "UPDATE `tbl_leads` SET $data WHERE `id`='$id'";
         $msg = "Successfully Updated";
     }
 
     if($mysqli->query($query)){
-       $result = array('result' => true, 'redirect' => 'task', 'dhSession' => ["success" => $msg]);
+       $result = array('result' => true, 'redirect' => 'leads-entry', 'dhSession' => ["success" => $msg]);
     }else{
         $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
     }
@@ -59,7 +56,7 @@ $gen_date=input_date(date('d-m-Y'));
 
   if(isset($_REQUEST['e_id'])){
     $id         = filtervar($mysqli, $_REQUEST['e_id']);
-    $get_result = $mysqli->query("SELECT * FROM `tbl_guest` WHERE `id`='$id' ");
+    $get_result = $mysqli->query("SELECT * FROM `tbl_leads` WHERE `id`='$id' ");
     if($get_result->num_rows){
         $row = $get_result->fetch_assoc();
         $action = "UPDATE";
@@ -164,10 +161,12 @@ $gen_date=input_date(date('d-m-Y'));
     </div>
     <div class="col-md-4">
         <label for="">Location</label>
-        <select name="infant_pax" id="infant_pax" class="form-select">
+        <select name="loc_id" id="loc_id" class="form-select">
             <option value="">Select</option>
-            <?php for($i=1;$i<=10;$i++){ ?>
-<option value="<?php echo $i ?>">Location</option>
+            <?php
+            $field_sql=$mysqli->query("SELECT * FROM `tbl_location` WHERE `is_deleted`=0");
+            while($field_fetch=$field_sql->fetch_array()){ ?>
+<option value="<?php echo $field_fetch['id'] ?>"><?php echo $field_fetch['location'] ?></option>
                 <?php } ?>
         </select>
     </div>
@@ -200,6 +199,26 @@ $gen_date=input_date(date('d-m-Y'));
 
     <script>
      $('.select2').select2();
+</script>
+<script>
+    $(document).ready(function() {
+        $('#search_guest').change(function() {
+            // Get the selected option
+            var selectedOption = $(this).find('option:selected');
+            
+            // Get data attributes from the selected option
+            var guestName = selectedOption.data('guest_name');
+            var guestPhone = selectedOption.data('guest_phone');
+            var guestEmail = selectedOption.data('email');
+            var guestId = selectedOption.data('guest_id');
+            
+            // Set the values in the respective input fields
+            $('#guest_name').val(guestName);
+            $('#guest_phone').val(guestPhone);
+            $('#email').val(guestEmail);
+            $('#guest_id').val(guestId); // Assuming you need to set this hidden field as well
+        });
+    });
 </script>
 </body>
 

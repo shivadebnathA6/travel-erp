@@ -1,6 +1,6 @@
 <?php
     include 'includes/db_config.php';
-    $thisPageTitle = 'LEADS';
+    $thisPageTitle = 'CAB VOUCHERS';
     $action = "ADD";
 
     if(isset($_REQUEST['draw'])){
@@ -14,12 +14,12 @@
         $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
        $searchValue     = mysqli_real_escape_string($mysqli, $_POST['search']['value']); // Search value
 
-        $di_sql = "SELECT * FROM `tbl_leads` WHERE `is_deleted`=0";
+        $di_sql = "SELECT * FROM `tbl_voucher_cab` WHERE `is_deleted`=0";
 
         ## Search
         $searchQuery = " ";
         if($searchValue != ''){
-          $di_sql .= " AND (`guest_name` LIKE '%" . $searchValue . "%')";
+          $di_sql .= " AND (`quotation_id` LIKE '%" . $searchValue . "%')";
         }
 
         $query        = $mysqli->query($di_sql);
@@ -32,39 +32,26 @@
         $slno = 0;
         while($row = mysqli_fetch_assoc($diRecords)){
             $slno++;
-            $row['lead_id']="LEAD-".$row['id'];
-            $row['guest_name']=getGuestName($row['guest_id']);
-            $row['pax']='';
-            if(!empty($row['male_pax'])){
-                $row['pax'].="Male ".$row['male_pax'];
-            }
-            if(!empty($row['female_pax'])){
-                $row['pax'].=" Female ".$row['female_pax'];
-            }
-            if(!empty($row['child_pax'])){
-                $row['pax'].=" Child ".$row['child_pax'];
-            }
-            if(!empty($row['infant_pax'])){
-                $row['pax'].=" Infant ".$row['infant_pax'];
-            }
-            $row['location']=getLocationName($row['loc_id']);
-           
-            $row['action'] = '<div class="dropdown">
-               <div class="form-select"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                 action
-               </div>
-               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">';
-            $row['action'].='<li><a class="dropdown-item" href="quotation-add">Add Quotation</a></li>';
-            $row['action'].='<li><a class="dropdown-item" href="#">edit Quotation</a></li>';
-            $row['action'].='<li><a class="dropdown-item" href="#">View Quotation</a></li>';
+//             <div class="dropdown">
+//   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+//     Dropdown button
+//   </button>
+//   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+//     <li><a class="dropdown-item" href="#">Action</a></li>
+//     <li><a class="dropdown-item" href="#">Another action</a></li>
+//     <li><a class="dropdown-item" href="#">Something else here</a></li>
+//   </ul>
+// </div>
+            $row['cab_name']=getCabName($row['cab_id']);
+            $row['date']=output_date($row['date']);
+            
+            $row['action'] = '<div class="btn-group" role="group" aria-label="table Button">';
 
-            $row['action'] .= '<li><a href="leads-entry?e_id=' . $row['id'] . '" type="button" class="dropdown-item" >Edit</a></li>';
+        $row['action'] .= '<a href="voucher-print?v=cab&e_id=' . $row['id'] . '" type="button" class="btn btn-sm btn-warning btn-table" ><i class="fa fa-print me-1"></i>Print</a>';
 
-            $row['action'] .= '<li><button type="button" class="dropdown-item" title="Delete Category" onclick="delete_row(' . $row['id'] . ')">Delete</button></li>';
-            $row['action'] .='</ul>
-             </div>';
+        $row['action'] .= '<button type="button" class="btn btn-sm btn-danger btn-table" title="Delete Category" onclick="delete_row(' . $row['id'] . ')"><i class="fa fa-trash me-1"></i>Delete</button>';
 
-            $row['action'] .= '</div>';
+        $row['action'] .= '</div>';
 
             $row['slno'] = $start + $slno;
             $data[] = $row;
@@ -87,7 +74,7 @@
     //======================Delete======================
     if(isset($_REQUEST['delete']) && !empty($_REQUEST['id'])){
         $id           = filtervar($mysqli, $_REQUEST['id']);
-        $update_query = $mysqli->query("UPDATE `tbl_leads` SET `is_deleted`=1 WHERE `id`='$id'");
+        $update_query = $mysqli->query("UPDATE `tbl_voucher_cab` SET `is_deleted`=1 WHERE `id`='$id'");
         if($update_query){
             $result = array('result'=>true,'dhSession'=>["warning"=>"Deleted Successfully!!"]);
         }
@@ -120,12 +107,19 @@
     <div class="col-12">
     <div class="card">
     <div class="card-header">
+<div class="row">
+    <div class="col-md-4">
     <h4>LIST <?php echo $thisPageTitle ?></h4>
     </div>
+    <div class="col-md-8 text-end">
+        <!-- <a href="voucher-entry" class="btn btn-primary"><i class="fa fa-plus me-1"></i>Add Voucher</a> -->
+    </div>
+</div>
+</div>
     <div class="card-body">
-
+<div class="table-responsive">
     <table id="datatable" class="table table-striped table-bordered"></table>
-    
+    </div>
     </div>
     </div>
     </div>
@@ -148,7 +142,7 @@
             'serverSide': true,
             'serverMethod': 'post',
             'ajax': {
-                'url': 'lead-list'
+                'url': 'voucher-cab'
              },
             'order': [  [0, "desc"] ],
             
@@ -165,30 +159,49 @@
                     orderable: false,
                 },
                 {
-                    data: 'lead_id',
-                    title: 'Lead ID',
+                    data: 'quotation_id',
+                    title: 'Quotation Id',
                     orderable: false,
                 },
                 {
-                    data: 'guest_name',
-                    title: 'Guest Name',
+                    data: 'cab_name',
+                    title: 'Cab',
+                    orderable: false,
+                    width: '15%',
+                },
+                {
+                    data: 'date',
+                    title: 'Date',
+                    orderable: false,
+                },
+                {
+                    data: 'from',
+                    title: 'From',
+                    orderable: false,
+                },
+                {
+                    data: 'to',
+                    title: 'To',
+                    orderable: false,
+                },
+               
+                {
+                    data: 'no_cab',
+                    title: 'No Of Cab',
                     orderable: false,
                 },
                 {
                     data: 'pax',
-                    title: 'PAX',
+                    title: 'No Of Passenger',
                     orderable: false,
                 },
                 {
-                    data: 'location',
-                    title: 'Location',
+                    data: 'cost',
+                    title: 'Cost',
                     orderable: false,
                 },
-                {
-                    data: 'remarks',
-                    title: 'Remarks',
-                    orderable: false,
-                },
+                
+
                 {
                     data: 'action',
                     title: 'Action',
@@ -202,7 +215,7 @@
         function delete_row(id){
           $.dhConfirm({
             dhContent: "Are you sure to Delete ?",
-            dhUrl: "lead-list?delete&id=" + id
+            dhUrl: "voucher-cab?delete&id=" + id
           })
         }
 

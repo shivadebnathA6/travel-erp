@@ -35,7 +35,7 @@
 
             $row['action'] = '<div class="btn-group" role="group" aria-label="table Button">';
 
-            $row['action'] .= '<a href="employee?e_id=' . $row['id'] . '" type="button" class="btn btn-sm btn-info btn-table" ><i class="fa fa-edit me-1"></i>Edit</a>';
+            $row['action'] .= '<a href="guest-entry?e_id=' . $row['id'] . '" type="button" class="btn btn-sm btn-info btn-table" ><i class="fa fa-edit me-1"></i>Edit</a>';
 
             $row['action'] .= '<button type="button" class="btn btn-sm btn-danger btn-table" title="Delete Category" onclick="delete_row(' . $row['id'] . ')"><i class="fa fa-trash me-1"></i>Delete</button>';
 

@@ -129,3 +129,54 @@ function get_guest_name($mysqli,$id){
     $fetch= $query->fetch_assoc();
     return $fetch["guest_name"];
     }
+// this soft fnc
+    function getHotelName($id){
+        global $mysqli;
+        $return='Hotel Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_hotel` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['hotel_name'];
+        }
+return $return;
+    }
+    function getCabName($id){
+        global $mysqli;
+        $return='Cab Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_cab` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['cab_name'];
+        }
+return $return;
+    }
+    function getAddonName($id){
+        global $mysqli;
+        $return='Addon Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_addon` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['addon_name'];
+        }
+return $return;
+    }
+    function getGuestName($id){
+        global $mysqli;
+        $return='Guest Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_guest` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['guest_name'];
+        }
+return $return;
+    }
+    function getLocationName($id){
+        global $mysqli;
+        $return='Location Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_location` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['location'];
+        }
+        return $return;
+    }
