@@ -96,7 +96,7 @@
     //======================Delete======================
     if(isset($_REQUEST['delete']) && !empty($_REQUEST['id'])){
         $id           = filtervar($mysqli, $_REQUEST['id']);
-        $update_query = $mysqli->query(" DELETE FROM `tbl_hotel` WHERE `id`='$id' ");
+        $update_query = $mysqli->query("UPDATE `tbl_hotel` SET `is_deleted`=1 WHERE `id`='$id'");
         if($update_query){
             $result = array('result'=>true,'dhSession'=>["warning"=>"Deleted Successfully!!"]);
         }

@@ -54,9 +54,7 @@
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="users"></i><span data-key="t-guest">Guests</span></a>
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="guest-entry">Add Guest</a></li>
-            <!-- <li><a href="guest-entry-excel">Bulk Upload</a></li> -->
             <li><a href="guest-list">List Guests</a></li>
-            <!-- <li><a href="guest-source">Guests Source</a></li> -->
          </ul>
         </li>
         <li>
@@ -64,7 +62,7 @@
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="leads-entry">Add Leads</a></li>
            
-            <li><a href="lead-list">List Guests</a></li>
+            <li><a href="lead-list">List Leads</a></li>
             
          </ul>
         </li>
@@ -81,11 +79,11 @@
         <li>
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="paperclip"></i><span data-key="t-pages">Reposts</span></a>
          <ul class="sub-menu" aria-expanded="false">
-            <li><a href="voucher-hotel">Payment Report</a></li>
-            <li><a href="voucher-hotel">Hotel Report</a></li>
-            <li><a href="voucher-hotel">Cab Report</a></li>
-            <li><a href="voucher-hotel">Addon Report</a></li>
-            <li><a href="voucher-hotel">Tour Report</a></li>
+            <li><a href="report-payment">Payment Report</a></li>
+            <li><a href="report-hotel">Hotel Report</a></li>
+            <li><a href="report-cab">Cab Report</a></li>
+            <li><a href="report-addon">Addon Report</a></li>
+            <li><a href="report-tour">Tour Report</a></li>
             
             
          </ul>
@@ -112,27 +110,18 @@
          </ul>
         </li>
         
-        <!-- <li> <a href="task"><i data-feather="list"></i><span data-key="t-task-list">Task List</span></a></li>
 
 
 
 
-        <?php if(admin_access($_SESSION['login']['user_id'])){ ?><li> <a href="employee"><i data-feather="user"></i><span data-key="t-employee">Employee</span></a></li><?php } ?> -->
+        <?php if(admin_access($_SESSION['login']['user_id'])){ ?><li> <a href="employee"><i data-feather="user"></i><span data-key="t-employee">Employee</span></a></li><?php } ?>
 
         
 
 
         <?php if(admin_access($_SESSION['login']['user_id'])){ ?> <li> <a href="company"><i data-feather="settings"></i><span data-key="t-company">Company</span></a></li><?php } ?>
 
-        <!-- <li>
-         <a href="javascript: void(0);" class="has-arrow"><i data-feather="users"></i><span data-key="t-pages">Guest</span></a>
-         <ul class="sub-menu" aria-expanded="false">
-            <li><a href="guest-entry">Add Guest</a></li>
-            <li><a href="guest-entry-excel">Bulk Upload</a></li>
-            <li><a href="guest-list">List Guests</a></li>
-            <li><a href="guest-source">Guests Source</a></li>
-         </ul>
-        </li> -->
+        
 
         </ul>
 
