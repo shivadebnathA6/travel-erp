@@ -180,3 +180,14 @@ return $return;
         }
         return $return;
     }
+    function getGuestRow($id){
+        global $mysqli;
+        $return='Guest Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_guest` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch;
+        }
+        return $return;
+    
+    }
