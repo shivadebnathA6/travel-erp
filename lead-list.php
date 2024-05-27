@@ -54,9 +54,9 @@
                  action
                </div>
                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">';
-            $row['action'].='<li><a class="dropdown-item" href="quotation-add">Add Quotation</a></li>';
+            $row['action'].='<li><a class="dropdown-item" href="quotation-add?lead_id='.$row['id'].'">Add Quotation</a></li>';
             $row['action'].='<li><a class="dropdown-item" href="#">edit Quotation</a></li>';
-            $row['action'].='<li><a class="dropdown-item" href="#">View Quotation</a></li>';
+            $row['action'].='<li><a class="dropdown-item" href="">View Quotation</a></li>';
 
             $row['action'] .= '<li><a href="leads-entry?e_id=' . $row['id'] . '" type="button" class="dropdown-item" >Edit</a></li>';
 
