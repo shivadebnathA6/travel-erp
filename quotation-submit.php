@@ -1,10 +1,10 @@
 <?php
     include 'includes/db_config.php';
-    include_once 'includes/style.php';
-   include_once 'includes/footer.php';
+
 $form_action=$_POST['form_action'];
 $id=$_POST['form_action'];
-$guest_id=$_POST['guest_id'];
+ $guest_id=$_POST['guest_id'];
+
 $lead_id=$_POST['lead_id'];
 
 $user_id=$_SESSION['login']['user_id'];
