@@ -77,6 +77,15 @@
          </ul>
         </li>
         <li>
+         <a href="javascript: void(0);" class="has-arrow"><i data-feather="credit-card"></i><span data-key="t-pages">Payments</span></a>
+         <ul class="sub-menu" aria-expanded="false">
+            <li><a href="payment-guest">Guest Payments</a></li>
+            <li><a href="payment-hotel">Hotel Payments</a></li>
+            <li><a href="payment-addon">Cab Payments</a></li>
+            <li><a href="payment-addon">Addon Payments</a></li>
+         </ul>
+        </li>
+        <li>
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="paperclip"></i><span data-key="t-pages">Reposts</span></a>
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="report-payment">Payment Report</a></li>
@@ -88,15 +97,7 @@
             
          </ul>
         </li>
-        <li>
-         <a href="javascript: void(0);" class="has-arrow"><i data-feather="credit-card"></i><span data-key="t-pages">Payments</span></a>
-         <ul class="sub-menu" aria-expanded="false">
-            <li><a href="payment-guest">Guest Payments</a></li>
-            <li><a href="payment-hotel">Hotel Payments</a></li>
-            <li><a href="payment-addon">Cab Payments</a></li>
-            <li><a href="payment-addon">Addon Payments</a></li>
-         </ul>
-        </li>
+       
         <li> <a href="invoice"><i data-feather="file"></i><span data-key="t-invoice">Invoice</span></a></li>
 
         <li>
