@@ -15,64 +15,16 @@
         }
       }
   
-
-  if(isset($_POST['submit'])){
-    $id = isset($_POST['id']) ? filtervar($mysqli, $_POST['id']) : '';
-    $form_action=filtervar($mysqli,$_POST['form_action']);
-$guest_name=filtervar($mysqli,$_POST['guest_name']);
-$guest_phone=filtervar($mysqli,$_POST['guest_phone']);
-$altphone=filtervar($mysqli,$_POST['altphone']);
-$email=filtervar($mysqli,$_POST['email']);
-$country=filtervar($mysqli,$_POST['country']);
-$address=filtervar($mysqli,$_POST['address']);
-$pincode=filtervar($mysqli,$_POST['pincode']);
-$remarks=filtervar($mysqli,$_POST['remarks']);
-$user_id=$_SESSION['login']['user_id'];
-$gen_date=input_date(date('d-m-Y'));
-
-
-
-
-    
-    $data = "`guest_name` = '$guest_name',
-    `guest_phone` = '$guest_phone',
-    `altphone` = '$altphone',
-    `email` = '$email',
-    `country` = '$country',
-    `address` = '$address',
-    `pincode` = '$pincode',
-    `remarks` = '$remarks',
-         ";
-
-    if($form_action == 'ADD'){
-        $data.="`created_by` = '$user_id',`created_at` = '$gen_date'";
-        $query = "INSERT INTO `tbl_guest` SET $data";
-      
-        $msg = "Successfully Inserted";
-    }elseif($form_action == 'UPDATE'){
-        $data.="`updated_by` = '$user_id',`updated_at` = '$gen_date'";
-        $query = "UPDATE `tbl_guest` SET $data WHERE `id`='$id'";
-        $msg = "Successfully Updated";
-    }
-
-    if($mysqli->query($query)){
-       $result = array('result' => true, 'redirect' => 'task', 'dhSession' => ["success" => $msg]);
-    }else{
-        $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
-    }
-
-    echo json_encode($result);
-    exit;
-  }
-
-    
-
   if(isset($_REQUEST['e_id'])){
     $id         = filtervar($mysqli, $_REQUEST['e_id']);
-    $get_result = $mysqli->query("SELECT * FROM `tbl_guest` WHERE `id`='$id' ");
+    $get_result = $mysqli->query("SELECT * FROM `tbl_quotation` WHERE `id`='$id' ");
     if($get_result->num_rows){
         $row = $get_result->fetch_assoc();
         $action = "UPDATE";
+        $guest=getGuestRow($row['guest_id']);
+        // print_r($row);
+        // die;
+        $lead_row=getLeadRow($row['lead_id']);
     }else{
         echo '<script>window.history.back();</script>'; exit;
     }
@@ -115,7 +67,7 @@ $gen_date=input_date(date('d-m-Y'));
                                     <div class="row g-3">
                                         <input type="hidden" name="form_action" id="form_action" value="<?php echo $action ?>">
                                         <input type="hidden" name="id" value="<?php echo (isset($row['id'])&&!empty($row['id'])?$row['id']:'') ?>">
-                                        <input type="hidden" name="guest_id" id="guest_id" value="<?php echo (isset($guest['guest_id'])&&!empty($guest['guest_id'])?$guest['guest_id']:'') ?>">
+                                        <input type="hidden" name="guest_id" id="guest_id" value="<?php echo (isset($guest['id'])&&!empty($guest['id'])?$guest['id']:'') ?>">
                                         <input type="hidden" name="lead_id" id="lead_id" value="<?php echo (isset($lead_row['id'])&&!empty($lead_row['id'])?$lead_row['id']:'') ?>">
                                         <div class="col-md-4">
                                             <label for="">Guest Name</label>

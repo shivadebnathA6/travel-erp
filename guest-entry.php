@@ -46,7 +46,7 @@ $gen_date=input_date(date('d-m-Y'));
     }
 
     if($mysqli->query($query)){
-       $result = array('result' => true, 'redirect' => 'task', 'dhSession' => ["success" => $msg]);
+       $result = array('result' => true, 'redirect' => 'guest-entry', 'dhSession' => ["success" => $msg]);
     }else{
         $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
     }

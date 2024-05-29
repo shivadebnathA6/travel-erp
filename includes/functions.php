@@ -191,3 +191,24 @@ return $return;
         return $return;
     
     }
+    function checkQuot($lead_id){
+        global $mysqli;
+        $return=false;
+        $query=$mysqli->query("SELECT * FROM `tbl_quotation` WHERE `lead_id`='$lead_id' ORDER BY `id` DESC");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch;
+        }
+        return $return;
+    
+    }
+    function getLeadRow($id){
+        global $mysqli;
+        $return='Lead Not Exixt';
+        $query=$mysqli->query("SELECT * FROM `tbl_leads` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch;
+        }
+        return $return;
+    }
