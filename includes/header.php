@@ -93,6 +93,7 @@
             <li><a href="report-cab">Cab Report</a></li>
             <li><a href="report-addon">Addon Report</a></li>
             <li><a href="report-tour">Tour Report</a></li>
+            <li><a href="report-prifit-loss">Profit & Loss</a></li>
             
             
          </ul>

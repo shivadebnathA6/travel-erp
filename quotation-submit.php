@@ -40,6 +40,7 @@ $hotel_total=$_POST['hotel_total'];
 $cab_total=$_POST['cab_total'];
 $addon_total=$_POST['addon_total'];
 $grand_total=$_POST['grand_total'];
+$pack_total=$_POST['pack_total'];
 //totals part end
 
 // data for quotation
@@ -49,6 +50,7 @@ $data="`guest_id`='$guest_id',
         `cab_total`='$cab_total',
         `addon_total`='$addon_total',
         `grand_total`='$grand_total',
+        `pack_total`='$pack_total',
 ";
 
 

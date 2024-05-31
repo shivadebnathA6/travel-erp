@@ -151,6 +151,10 @@
                                                             <label for="">Cost</label>
                                                             <input type="text" name="hotel_cost[]" value="" class="form-control">
                                                         </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">Customer Price</label>
+                                                            <input type="text" name="hotel_customer_price[]" value="" class="form-control">
+                                                        </div>
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-hotel-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -209,6 +213,10 @@
                                                             <label for="">Cost</label>
                                                             <input type="text" name="cab_cost[]" value="" class="form-control">
                                                         </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">Customer Price</label>
+                                                            <input type="text" name="cab_customer_price[]" value="" class="form-control">
+                                                        </div>
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-cab-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -257,6 +265,10 @@
                                                             <label for="">Cost</label>
                                                             <input type="text" name="addon_cost[]" value="" class="form-control">
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <label for="">Customer Price</label>
+                                                            <input type="text" name="addon_customer_price[]" value="" class="form-control">
+                                                        </div>
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-addon-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -282,6 +294,10 @@
                                         <div class="col-md-4">
                                             <label for="">Grand Total</label>
                                             <input type="text" name="grand_total" id="grand_total" class="form-control" readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">Packege Total</label>
+                                            <input type="text" name="pack_total" id="pack_total" class="form-control" required>
                                         </div>
                                         <!-- calculations-end -->
 
@@ -412,17 +428,17 @@
             let addonTotal = 0;
 
             $('.hotel-body .hotel-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="hotel_cost[]"]').val()) || 0;
+                let cost = parseFloat($(this).find('input[name="hotel_customer_price[]"]').val()) || 0;
                 hotelTotal += cost;
             });
 
             $('.cab-body .cab-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="cab_cost[]"]').val()) || 0;
+                let cost = parseFloat($(this).find('input[name="cab_customer_price[]"]').val()) || 0;
                 cabTotal += cost;
             });
 
             $('.addon-body .addon-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="addon_cost[]"]').val()) || 0;
+                let cost = parseFloat($(this).find('input[name="addon_customer_price[]"]').val()) || 0;
                 addonTotal += cost;
             });
 
@@ -433,7 +449,7 @@
             let grandTotal = hotelTotal + cabTotal + addonTotal;
             $('#grand_total').val(grandTotal.toFixed(2));
         }
-        $(document).on('input', 'input[name="hotel_cost[]"], input[name="cab_cost[]"], input[name="addon_cost[]"]', function() {
+        $(document).on('input', 'input[name="hotel_customer_price[]"], input[name="cab_customer_price[]"], input[name="addon_customer_price[]"]', function() {
             calculateTotals();
         });
 

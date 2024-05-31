@@ -225,18 +225,28 @@ return $return;
     function checkPaymentAmount($quotation_id,$payment_amount){
         global $mysqli;
         $return=false;
-        $query=$mysqli->query("SELECT grand_total  FROM `tbl_quotation` WHERE `id`='$quotation_id'");
-      $fetch_grand_total=$query->fetch_array();
-      $grand_total=$fetch_grand_total['grand_total'];
+        $query=$mysqli->query("SELECT pack_total  FROM `tbl_quotation` WHERE `id`='$quotation_id'");
+      $fetch_pack_total=$query->fetch_array();
+      $pack_total=$fetch_pack_total['pack_total'];
       $query2=$mysqli->query("SELECT SUM(`paid_amount`) AS total_paid FROM `tbl_payment_guest` WHERE `quotation_id`='$quotation_id'");
         
             $fetch=$query2->fetch_assoc();
-            $due=$grand_total-$fetch['total_paid'];
+            $due=$pack_total-$fetch['total_paid'];
 
             $due=$due-$payment_amount;
             if($due>=0){
             $return=true;
             }
         
+        return $return;
+    }
+    function getQuotTotalAmount(){
+        global $mysqli;
+        $return=false;
+        $query=$mysqli->query("SELECT SUM(`pack_total`) as all_pack_total FROM `tbl_quotation` ORDER BY `id` DESC");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['all_pack_total'];
+        }
         return $return;
     }
