@@ -5,35 +5,35 @@ $action = "ADD";
 
 $query = $mysqli->query("SELECT * FROM `tbl_quotation` WHERE `is_deleted`=0");
 
-if(isset($_REQUEST['submit'])){
-   $check=checkPaymentAmount($_POST['quotation_id'],$_POST['paid_amount']);
-if($check){
-    $quotation_id=filtervar($mysqli,$_POST['quotation_id']);
-    $paid_amount=filtervar($mysqli,$_POST['paid_amount']);
-    $guest_id=filtervar($mysqli,$_POST['guest_id']);
-    $payment_date=filtervar($mysqli,input_date($_POST['payment_date']));
-    $due_amount=filtervar($mysqli,$_POST['due_amount']);
-    $due_amount=$due_amount-$paid_amount;
-    $user_id=$_SESSION['login']['user_id'];
-    $gen_date=input_date(date('d-m-Y'));
+if (isset($_REQUEST['submit'])) {
+    $check = checkPaymentAmount($_POST['quotation_id'], $_POST['paid_amount']);
+    if ($check) {
+        $quotation_id = filtervar($mysqli, $_POST['quotation_id']);
+        $paid_amount = filtervar($mysqli, $_POST['paid_amount']);
+        $guest_id = filtervar($mysqli, $_POST['guest_id']);
+        $payment_date = filtervar($mysqli, input_date($_POST['payment_date']));
+        $due_amount = filtervar($mysqli, $_POST['due_amount']);
+        $due_amount = $due_amount - $paid_amount;
+        $user_id = $_SESSION['login']['user_id'];
+        $gen_date = input_date(date('d-m-Y'));
 
 
-    $data     = "   `quotation_id`       = '$quotation_id',
+        $data     = "   `quotation_id`       = '$quotation_id',
                     `guest_id`       = '$guest_id',
                     `created_at`       = '$payment_date',
                     `due_amount`       = '$due_amount',
                         `paid_amount`      = '$paid_amount',";
-    $data.="`created_by` = '$user_id'";
-    $query_insert = "INSERT INTO `tbl_payment_guest` SET $data";
-    $msg   = "Successfully Inserted";
-    if($mysqli->query($query_insert)){
-        $result = array('result' => true, 'redirect' => 'payment-guest', 'dhSession' => ["success" => $msg]);
-    }else{
-        $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
+        $data .= "`created_by` = '$user_id'";
+        $query_insert = "INSERT INTO `tbl_payment_guest` SET $data";
+        $msg   = "Successfully Inserted";
+        if ($mysqli->query($query_insert)) {
+            $result = array('result' => true, 'redirect' => 'payment-guest', 'dhSession' => ["success" => $msg]);
+        } else {
+            $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
+        }
+    } else {
+        $result = array('result' => false, 'dhSession' => ["warning" => "Sorry !! Try Again0"]);
     }
-}else{
-    $result = array('result' => false, 'dhSession' => ["warning" => "Sorry !! Try Again0"]);
-}
     echo json_encode($result);
     exit;
 }
@@ -68,13 +68,13 @@ if($check){
                                     <input type="hidden" class="form-control" id="guest_id" name="guest_id">
                                     <label for="">Amount</label>
                                     <input type="text" class="form-control numInput" id="paid_amount" name="paid_amount">
-                                <label for="">Date</label>
-                                <input type="text" name="payment_date" class="form-control datepicker" id="payment_date">
+                                    <label for="">Date</label>
+                                    <input type="text" name="payment_date" class="form-control datepicker" id="payment_date">
                                 </div>
-                                
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary"data-bs-dismiss="modal">Make Payment</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Make Payment</button>
                                 </div>
                             </form>
                         </div>
@@ -82,7 +82,18 @@ if($check){
                 </div>
                 <!-- modal end -->
                 <!-- start page title -->
-                <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <select name="" id="" class="form-select select2">
+                                    <option value="">Chose Guest</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped">
@@ -105,11 +116,16 @@ if($check){
                                         <td><?php echo $row['pack_total'] ?></td>
                                         <td><?php $paid = getQuotDue($row['id']);
                                             echo $row['pack_total'] - $paid ?></td>
-                                        <td><?php $due=$row['pack_total'] - $paid; if($due>=0){ ?><button type="button" onclick="openPayNow(<?php echo $row['id'] ?>,<?php echo $row['guest_id'] ?>,<?php echo $due ?>)" class="btn btn-sm btn-success">Pay Now</button> <?php }else{ echo 'paid'; } ?></td>
+                                        <td><?php $due = $row['pack_total'] - $paid;
+                                            if ($due >= 0) { ?><button type="button" onclick="openPayNow(<?php echo $row['id'] ?>,<?php echo $row['guest_id'] ?>,<?php echo $due ?>)" class="btn btn-sm btn-success">Pay Now</button> <?php } else {
+                                                                                                                                                                                                                                                                            echo 'paid';
+                                                                                                                                                                                                                                                                        } ?></td>
                                     </tr>
                                 <?php } ?>
                             </table>
                         </div>
+                    </div>
+                </div>
                     </div>
                 </div>
                 <!-- end page title -->
@@ -120,11 +136,12 @@ if($check){
 
     <?php include_once 'includes/footer.php' ?>
     <script src="assets/libs/jquery/jquery.min.js"></script>
-        <script src="assets/libs/jquery-ui/jquery-ui.js"></script>
+    <script src="assets/libs/jquery-ui/jquery-ui.js"></script>
 
     <script>
         $('.datepicker').datepicker();
-        function openPayNow(quotation_id,guest_id,due_amount) {
+
+        function openPayNow(quotation_id, guest_id, due_amount) {
             $('input').val('');
             $('#quotation_id').val(quotation_id);
             $('#due_amount').val(due_amount);
