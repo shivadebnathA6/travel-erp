@@ -93,7 +93,7 @@ $query = $mysqli->query($sql);
                                 <div class="col-md-2">
                                     <input type="text" name="start_date" id="start_date" class="form-control start_date" placeholder="Enter Date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
                                 </div>
-                                <div class="col-md_2">
+                                <div class="col-md-2">
                                     <input type="text" name="end_date" id="end_date" class="form-control end_date" placeholder="Enter Date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
                                 </div>
                                 <div class="col-md-3">
@@ -102,7 +102,7 @@ $query = $mysqli->query($sql);
                                             <button type="submit" class="btn btn-primary w-100">Filter</button>
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="report-payment" class="btn btn-warning w-100">Reset</a>
+                                            <a href="report-prifit-loss" class="btn btn-warning w-100">Reset</a>
                                         </div>
                                     </div>
                                 </div>
