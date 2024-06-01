@@ -3,21 +3,32 @@ include 'includes/after_login.php';
 $thisPageTitle = 'GUEST PAYMENTS REPORT';
 $action = "ADD";
 
-// SQL query
-$sql = "SELECT q.guest_id as guest_id, 
-               q.created_at as created_at,
-               q.pack_total as pack_total, 
-               q.id as quotation_id, 
-               va.addon_id as addon_id, 
-               SUM(va.cost) as addon_cost, 
-               vc.cab_id as cab_id,
-               SUM(vc.cost) as cab_cost, 
-               vh.hotel_id as hotel_id, 
-               SUM(vh.cost) as hotel_cost
-        FROM tbl_voucher_addon va
-        INNER JOIN tbl_quotation q ON va.quotation_id = q.id
-        INNER JOIN tbl_voucher_cab vc ON vc.quotation_id = q.id
-        INNER JOIN tbl_voucher_hotel vh ON vh.quotation_id = q.id
+// Base SQL query with LEFT JOINs
+$sql = "SELECT 
+            q.guest_id as guest_id, 
+            q.created_at as created_at,
+            q.pack_total as pack_total, 
+            q.id as quotation_id, 
+            COALESCE(a.total_addon_cost, 0) AS total_addon_cost, 
+            COALESCE(c.total_cab_cost, 0) AS total_cab_cost, 
+            COALESCE(h.total_hotel_cost, 0) AS total_hotel_cost, 
+            COALESCE(a.total_addon_cost, 0) + COALESCE(c.total_cab_cost, 0) + COALESCE(h.total_hotel_cost, 0) AS total_cost 
+        FROM tbl_quotation q 
+        LEFT JOIN (
+            SELECT quotation_id, SUM(cost) AS total_addon_cost 
+            FROM tbl_voucher_addon 
+            GROUP BY quotation_id
+        ) a ON q.id = a.quotation_id 
+        LEFT JOIN (
+            SELECT quotation_id, SUM(cost) AS total_cab_cost 
+            FROM tbl_voucher_cab 
+            GROUP BY quotation_id
+        ) c ON q.id = c.quotation_id 
+        LEFT JOIN (
+            SELECT quotation_id, SUM(cost) AS total_hotel_cost 
+            FROM tbl_voucher_hotel 
+            GROUP BY quotation_id
+        ) h ON q.id = h.quotation_id 
         WHERE q.is_deleted = 0";
 
 // Add filters
@@ -34,8 +45,6 @@ if(isset($_GET["start_date"]) && isset($_GET["end_date"]) && !empty($_GET["start
     $end_date = input_date($_GET["end_date"]);
     $sql .= " AND q.created_at BETWEEN '$start_date' AND '$end_date'";
 }
-
-$sql .= " GROUP BY q.guest_id, q.pack_total, q.id, va.addon_id, vc.cab_id, vh.hotel_id, q.created_at";
 
 $query = $mysqli->query($sql);
 ?>
@@ -84,7 +93,7 @@ $query = $mysqli->query($sql);
                                 <div class="col-md-2">
                                     <input type="text" name="start_date" id="start_date" class="form-control start_date" placeholder="Enter Date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md_2">
                                     <input type="text" name="end_date" id="end_date" class="form-control end_date" placeholder="Enter Date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
                                 </div>
                                 <div class="col-md-3">
@@ -121,7 +130,7 @@ $query = $mysqli->query($sql);
                                         $slno = 1;
                                         $total_profit=0;
                                         while ($row = $query->fetch_array()) { 
-                                            $total_cost = $row['hotel_cost'] + $row['cab_cost'] + $row['addon_cost'];
+                                            $total_cost = $row['total_hotel_cost'] + $row['total_cab_cost'] + $row['total_addon_cost'];
                                             $profit = $row['pack_total'] - $total_cost;
                                         ?>
                                             <tr>
@@ -129,9 +138,9 @@ $query = $mysqli->query($sql);
                                                 <td><?php echo 'QUOT-' . $row['quotation_id']; ?></td>
                                                 <td><?php echo getGuestName($row['guest_id']); ?></td>
                                                 <td><?php echo $row['pack_total']; ?></td>
-                                                <td><?php echo $row['hotel_cost']; ?></td>
-                                                <td><?php echo $row['cab_cost']; ?></td>
-                                                <td><?php echo $row['addon_cost']; ?></td>
+                                                <td><?php echo $row['total_hotel_cost']; ?></td>
+                                                <td><?php echo $row['total_cab_cost']; ?></td>
+                                                <td><?php echo $row['total_addon_cost']; ?></td>
                                                 <td><?php echo $total_cost; ?></td>
                                                 <td><?php echo $profit;$total_profit+=$profit; ?></td>
                                                 <td><?php echo output_date($row['created_at']); ?></td>
