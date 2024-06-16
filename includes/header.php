@@ -106,6 +106,9 @@
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="master-location">Master Location</a></li>
             <li><a href="master-hotel">Master Hotel</a></li>
+            <li><a href="master-room-type">Master Room Type</a></li>
+            <li><a href="master-meal-plan">Master Meal Plan</a></li>
+            <li><a href="master-hotel-tariff">Master Hotel Tariff</a></li>
             <li><a href="master-cab">Master Cab</a></li>
             <li><a href="master-addon">Master Addon</a></li>
 
