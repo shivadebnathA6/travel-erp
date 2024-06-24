@@ -80,19 +80,19 @@
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="credit-card"></i><span data-key="t-pages">Payments</span></a>
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="payment-guest">Guest Payments</a></li>
-            <li><a href="payment-hotel">Hotel Payments</a></li>
+            <!-- <li><a href="payment-hotel">Hotel Payments</a></li>
             <li><a href="payment-addon">Cab Payments</a></li>
-            <li><a href="payment-addon">Addon Payments</a></li>
+            <li><a href="payment-addon">Addon Payments</a></li> -->
          </ul>
         </li>
         <li>
          <a href="javascript: void(0);" class="has-arrow"><i data-feather="paperclip"></i><span data-key="t-pages">Reposts</span></a>
          <ul class="sub-menu" aria-expanded="false">
             <li><a href="report-payment">Payment Report</a></li>
-            <li><a href="report-hotel">Hotel Report</a></li>
+            <!-- <li><a href="report-hotel">Hotel Report</a></li>
             <li><a href="report-cab">Cab Report</a></li>
             <li><a href="report-addon">Addon Report</a></li>
-            <li><a href="report-tour">Tour Report</a></li>
+            <li><a href="report-tour">Tour Report</a></li> -->
             <li><a href="report-prifit-loss">Profit & Loss</a></li>
             
             
@@ -108,6 +108,9 @@
             <li><a href="master-hotel">Master Hotel</a></li>
             <li><a href="master-cab">Master Cab</a></li>
             <li><a href="master-addon">Master Addon</a></li>
+            <li><a href="master-rooms">Master Room</a></li>
+            <li><a href="master-meal">Master Meal Plan</a></li>
+            <li><a href="master-room-terrif">Room Terrif</a></li>
 
          </ul>
         </li>
