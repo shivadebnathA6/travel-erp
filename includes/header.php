@@ -111,6 +111,7 @@
             <li><a href="master-rooms">Master Room</a></li>
             <li><a href="master-meal">Master Meal Plan</a></li>
             <li><a href="master-room-terrif">Room Terrif</a></li>
+            <li><a href="master-itinerary">Master Itinerary</a></li>
 
          </ul>
         </li>
