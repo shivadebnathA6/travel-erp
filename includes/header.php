@@ -109,6 +109,7 @@
             <li><a href="master-cab">Master Cab</a></li>
             <li><a href="master-addon">Master Addon</a></li>
             <li><a href="master-room-type">Master Room</a></li>
+            <li><a href="master-child-category">Master Child</a></li>
             <li><a href="master-meal-plan">Master Meal Plan</a></li>
             <li><a href="master-hotel-tariff">Master Hotel Terrif</a></li>
             <li><a href="master-itinerary">Master Itinerary</a></li>

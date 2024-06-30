@@ -140,6 +140,36 @@ function get_guest_name($mysqli,$id){
         }
 return $return;
     }
+    function getMealPlan($id){
+        global $mysqli;
+        $return='Meal Plan Not Exist';
+        $query=$mysqli->query("SELECT * FROM `tbl_master_meals` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['meal_plan'];
+        }
+return $return;
+    }
+    function getRoomType($id){
+        global $mysqli;
+        $return='Meal Plan Not Exist';
+        $query=$mysqli->query("SELECT * FROM `tbl_master_rooms` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['room_type'];
+        }
+return $return;
+    }
+    function getChildType($id){
+        global $mysqli;
+        $return='Meal Plan Not Exist';
+        $query=$mysqli->query("SELECT * FROM `tbl_master_child` WHERE `id`='$id'");
+        if($query->num_rows > 0){
+            $fetch=$query->fetch_assoc();
+            $return=$fetch['category_type'];
+        }
+return $return;
+    }
     function getCabName($id){
         global $mysqli;
         $return='Cab Not Exixt';

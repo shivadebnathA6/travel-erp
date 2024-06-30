@@ -14,12 +14,12 @@ if (isset($_REQUEST['draw'])) {
     $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
     $searchValue     = mysqli_real_escape_string($mysqli, $_POST['search']['value']); // Search value
 
-    $di_sql = "SELECT * FROM `tbl_addon` WHERE `is_deleted`=0";
+    $di_sql = "SELECT * FROM `master_hotel_tariff` WHERE `is_deleted`=0";
 
     ## Search
     $searchQuery = " ";
     if ($searchValue != '') {
-        $di_sql .= " AND (`addon_name` LIKE '%" . $searchValue . "%')";
+        $di_sql .= " AND (`hotel_name` LIKE '%" . $searchValue . "%')";
     }
 
     $query        = $mysqli->query($di_sql);
@@ -32,10 +32,14 @@ if (isset($_REQUEST['draw'])) {
     $slno = 0;
     while ($row = mysqli_fetch_assoc($diRecords)) {
         $slno++;
+        $row['hotel_name']=getHotelName($row['hotel_id']);
+        $row['meal_plan']=getMealPlan($row['meal_id']);
+        $row['room_type']=getRoomType($row['type_id']);
+        $row['child_type']=getChildType($row['child_id']);
 
         $row['action'] = '<div class="btn-group" role="group" aria-label="table Button">';
 
-        $row['action'] .= '<a href="master-addon?e_id=' . $row['id'] . '" type="button" class="btn btn-sm btn-info btn-table" ><i class="fa fa-edit me-1"></i>Edit</a>';
+        $row['action'] .= '<a href="master-hotel-tariff?e_id=' . $row['id'] . '" type="button" class="btn btn-sm btn-info btn-table" ><i class="fa fa-edit me-1"></i>Edit</a>';
 
         $row['action'] .= '<button type="button" class="btn btn-sm btn-danger btn-table" title="Delete Category" onclick="delete_row(' . $row['id'] . ')"><i class="fa fa-trash me-1"></i>Delete</button>';
 
@@ -60,32 +64,58 @@ if (isset($_REQUEST['draw'])) {
 if (isset($_POST['submit'])) {
     $id           = isset($_POST['id']) ? filtervar($mysqli, $_POST['id']) : '';
     $form_action  = filtervar($mysqli, $_POST['form_action']);
-    $addon_name         = filtervar($mysqli, $_POST['addon_name']);
-    $addon_ph        = filtervar($mysqli, $_POST['addon_ph']);
-    $addon_email      = filtervar($mysqli, $_POST['addon_email']);
+    $hotel_id=filtervar($mysqli,$_POST['hotel_id']);
+    $valid_from=input_date(filtervar($mysqli,$_POST['valid_from']));
+$valid_to=input_date(filtervar($mysqli,$_POST['valid_to']));
+$type_idArr=$_POST['type_id'];
+$meal_idArr=$_POST['meal_id'];
+    $child_idArr=$_POST['child_id'];
+    $rateArr=$_POST['rate'];
     $user_id = $_SESSION['login']['user_id'];
     $gen_date = input_date(date('d-m-Y'));
+    $arrcount= count($type_idArr);
+    for($i=0;$i<$arrcount;$i++){
+        $type_id= filtervar($mysqli,$type_idArr[$i]);
+        $meal_id= filtervar($mysqli,$meal_idArr[$i]);
+        $child_id= filtervar($mysqli,$child_idArr[$i]);
+        $rate= filtervar($mysqli,$rateArr[$i]);
+        
+        $data     = "   `hotel_id`       = '$hotel_id',
+        `type_id`      = '$type_id',
+        `child_id`    = '$child_id',
+        `rate`    = '$rate',
+        `valid_from`    = '$valid_from',
+        `valid_to`    = '$valid_to',
+        `meal_id`    = '$meal_id',";
+        if ($form_action == 'ADD') {
+            $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
+            $query = "INSERT INTO `master_hotel_tariff` SET $data";
+            $id    = $mysqli->insert_id;
+            $msg   = "Successfully Inserted";
+            $mysqli->query($query);
+        }
 
-    $data     = "   `addon_name`       = '$addon_name',
-                        `addon_ph`      = '$addon_ph',
-                        `addon_email`    = '$addon_email',";
-
-    if ($form_action == 'ADD') {
-        $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
-        $query = "INSERT INTO `tbl_addon` SET $data";
-        $id    = $mysqli->insert_id;
-        $msg   = "Successfully Inserted";
-    } elseif ($form_action == 'UPDATE') {
-        $data .= "`updated_by` = '$user_id',`updated_at` = '$gen_date'";
-        $query = "UPDATE `tbl_addon` SET $data WHERE `id`='$id'";
-        $msg   = "Successfully Updated";
     }
+    $result = array('result' => true, 'redirect' => 'master-hotel-tariff', 'dhSession' => ["success" => $msg]);
+    
+   
 
-    if ($mysqli->query($query)) {
-        $result = array('result' => true, 'redirect' => 'master-addon', 'dhSession' => ["success" => $msg]);
-    } else {
-        $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
-    }
+    // if ($form_action == 'ADD') {
+    //     $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
+    //     $query = "INSERT INTO `master_hotel_tariff` SET $data";
+    //     $id    = $mysqli->insert_id;
+    //     $msg   = "Successfully Inserted";
+    // } elseif ($form_action == 'UPDATE') {
+    //     $data .= "`updated_by` = '$user_id',`updated_at` = '$gen_date'";
+    //     $query = "UPDATE `master_hotel_tariff` SET $data WHERE `id`='$id'";
+    //     $msg   = "Successfully Updated";
+    // }
+
+    // if ($mysqli->query($query)) {
+    //     $result = array('result' => true, 'redirect' => 'master-hotel-tariff', 'dhSession' => ["success" => $msg]);
+    // } else {
+    //     $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
+    // }
 
     echo json_encode($result);
     exit;
@@ -94,7 +124,7 @@ if (isset($_POST['submit'])) {
 //======================Delete======================
 if (isset($_REQUEST['delete']) && !empty($_REQUEST['id'])) {
     $id           = filtervar($mysqli, $_REQUEST['id']);
-    $update_query = $mysqli->query("UPDATE `tbl_addon` SET `is_deleted`=1 WHERE `id`='$id'");
+    $update_query = $mysqli->query("UPDATE `master_hotel_tariff` SET `is_deleted`=1 WHERE `id`='$id'");
     if ($update_query) {
         $result = array('result' => true, 'dhSession' => ["warning" => "Deleted Successfully!!"]);
     } else {
@@ -106,7 +136,7 @@ if (isset($_REQUEST['delete']) && !empty($_REQUEST['id'])) {
 
 if (isset($_REQUEST['e_id'])) {
     $id         = filtervar($mysqli, $_REQUEST['e_id']);
-    $get_result = $mysqli->query("SELECT * FROM `tbl_addon` WHERE `id`='$id' ");
+    $get_result = $mysqli->query("SELECT * FROM `master_hotel_tariff` WHERE `id`='$id' ");
     if ($get_result->num_rows) {
         $row    = $get_result->fetch_assoc();
         $action = "UPDATE";
@@ -150,7 +180,7 @@ if (isset($_REQUEST['e_id'])) {
                     <input type="hidden" name="id" value="<?php echo (isset($row['id']) && !empty($row['id']) ? $row['id'] : '') ?>">
                     <div class="col-md-4">
                         <label for="">Hotel</label>
-                        <select name="hotel_id" id="hotel_id" class="form-select">
+                        <select name="hotel_id" id="hotel_id" class="form-select" required>
                             <option value="">Select Hotel</option>
                             <?php
                             $field_query = $mysqli->query("SELECT * FROM `tbl_hotel` WHERE `is_deleted`=0");
@@ -164,18 +194,18 @@ if (isset($_REQUEST['e_id'])) {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="">Valid From</label>
-                                <input type="text" class="form-control start_date" name="" id="" readonly placeholder="Enter Date">
+                                <input type="text" class="form-control start_date" name="valid_from" id="valid_from" readonly placeholder="Enter Date" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="">Valid To</label>
-                                <input type="text" class="form-control end_date" name="" id="" readonly placeholder="Enter Date">
+                                <input type="text" class="form-control end_date" name="valid_to" id="valid_to" readonly placeholder="Enter Date" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 t_container" id="t_container">
                         <div class="row t_content pt-4" id="t_content">
-                            <div class="col-md-4">
-                                <select name="type_id[]" id="type_id" class="form-select">
+                            <div class="col-md-3">
+                                <select name="type_id[]" id="type_id" class="form-select" required>
                                     <option value="">Select Room Type</option>
                                     <?php
                                     $field_query = $mysqli->query("SELECT * FROM `tbl_master_rooms` WHERE `is_deleted`=0");
@@ -185,8 +215,8 @@ if (isset($_REQUEST['e_id'])) {
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <select name="meal_id[]" id="meal_id" class="form-select">
+                            <div class="col-md-3">
+                                <select name="meal_id[]" id="meal_id" class="form-select" required>
                                     <option value="">Select Meal Plan</option>
                                     <?php
                                     $field_query = $mysqli->query("SELECT * FROM `tbl_master_meals` WHERE `is_deleted`=0");
@@ -196,12 +226,23 @@ if (isset($_REQUEST['e_id'])) {
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" placeholder="RATE" name="" id="">
+                            <div class="col-md-3">
+                                <select name="child_id[]" id="child_id" class="form-select">
+                                    <option value="">Select Child category</option>
+                                    <?php
+                                    $field_query = $mysqli->query("SELECT * FROM `tbl_master_child` WHERE `is_deleted`=0");
+                                    while ($field_fetch = $field_query->fetch_assoc()) {
+                                    ?>
+                                        <option value="<?php echo $field_fetch['id'] ?>" data-ho><?php echo $field_fetch['category_type']  ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
-                            <div class="col-md-2 text-end">
-                                <button type="button" class="btn btn-primary w-50 add_t"><i class="fa fa-plus"></i></button>
-                                <button type="button" class="btn btn-danger w-50 remove_t" style="display:none;"><i class="fa fa-trash"></i></button>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="RATE" name="rate[]" id="rate" required>
+                            </div>
+                            <div class="col-md-1 text-end">
+                                <button type="button" class="btn btn-sm btn-primary w-50 add_t"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger w-50 remove_t" style="display:none;"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -217,7 +258,7 @@ if (isset($_REQUEST['e_id'])) {
 
                     <!-- form proparty end -->
                     <!-- table property Start -->
-                    <!-- <div class="col-12">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4>LIST <?php echo $thisPageTitle ?></h4>
@@ -228,7 +269,7 @@ if (isset($_REQUEST['e_id'])) {
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- end page title -->
 
                 </div> <!-- container-fluid -->
@@ -274,7 +315,7 @@ if (isset($_REQUEST['e_id'])) {
                     'serverSide': true,
                     'serverMethod': 'post',
                     'ajax': {
-                        'url': 'master-addon'
+                        'url': 'master-hotel-tariff'
                     },
                     'order': [
                         [0, "desc"]
@@ -291,19 +332,39 @@ if (isset($_REQUEST['e_id'])) {
                             orderable: false,
                         },
                         {
-                            data: 'addon_name',
-                            title: 'Name',
+                            data: 'hotel_name',
+                            title: 'Hotel Name',
                             orderable: false,
                         },
 
                         {
-                            data: 'addon_ph',
-                            title: 'Phone',
+                            data: 'meal_plan',
+                            title: 'Meal Plan',
                             orderable: false,
                         },
                         {
-                            data: 'addon_email',
-                            title: 'Email',
+                            data: 'room_type',
+                            title: 'Room Type',
+                            orderable: false,
+                        },
+                        {
+                            data: 'child_type',
+                            title: 'Child Type',
+                            orderable: false,
+                        },
+                        {
+                            data: 'valid_from',
+                            title: 'Valid From',
+                            orderable: false,
+                        },
+                        {
+                            data: 'valid_to',
+                            title: 'Valid To',
+                            orderable: false,
+                        },
+                        {
+                            data: 'rate',
+                            title: 'Rate',
                             orderable: false,
                         },
 
@@ -320,7 +381,7 @@ if (isset($_REQUEST['e_id'])) {
             function delete_row(id) {
                 $.dhConfirm({
                     dhContent: "Are you sure to Delete ?",
-                    dhUrl: "master-addon?delete&id=" + id
+                    dhUrl: "master-hotel-tariff?delete&id=" + id
                 })
             }
 
