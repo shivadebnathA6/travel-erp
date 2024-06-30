@@ -187,7 +187,7 @@ if (isset($_REQUEST['e_id'])) {
                                         </div>
                                         <div class="col-md-2">
                                             <label for="">No Of Day</label>
-                                            <input type="text" class="form-control numInput" name="no_of_day" id="package_title" value="<?php echo (isset($row['package_title'])) ? $row['package_title'] : '' ?>" placeholder="No Of Day" required>
+                                            <input type="text" class="form-control numInput" name="no_of_day" id="no_of_day" value="<?php echo (isset($row['no_of_day'])) ? $row['package_title'] : '' ?>" placeholder="No Of Day" required>
                                         </div>
                                         <div class="col-md-2">
                                             <label for="">No Of Night</label>
