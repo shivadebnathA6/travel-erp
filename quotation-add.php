@@ -121,7 +121,7 @@
                                                     <div class="row g-3 hotel-row">
                                                         <div class="col-md-2">
                                                             <label for="">Hotel</label>
-                                                            <select name="hotel[]" class="form-select">
+                                                            <select name="hotel[]" class="form-select hotel-select">
                                                                 
                                                                 <option value="">Select Hotel</option>
                                                                 <?php $field_sql=$mysqli->query("SELECT * FROM `tbl_hotel` WHERE `is_deleted`=0");
@@ -133,20 +133,22 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Room Type </label>
-                                                            <select name="" id="">
-                                                                <option value="">Select Room Type</option>
+                                                            <select name="room_type[]" id="room_type" class="form-select room-type" required>
+                                                                <!-- <option value="">Select Room Type</option> -->
+                                                                <option value="">Hotel Not Selected</option>
+                                                                
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Meal Plan</label>
-                                                            <select name="" id="" class="form-select">
-                                                                <option value="">Select Meal Plan</option>
+                                                            <select name="meal_plan[]" id="meal_plan" class="form-select meal-plan">
+                                                                <option value="">Hotel Not Selected</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Child Category</label>
-                                                            <select name="" id="" class="form-select">
-                                                                <option value="">Select Child Category</option>
+                                                            <select name="child_category[]" id="child_category" class="form-select child-category">
+                                                                <option value="">Hotel Not Selected</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">
@@ -163,8 +165,8 @@
                                                             <input type="text" name="rooms[]" value="" class="form-control">
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <label for="">Cost</label>
-                                                            <input type="text" name="hotel_cost[]" value="" class="form-control">
+                                                            <label for="">Actual Price</label>
+                                                            <input style="background-color:#90EE90;" type="text" name="hotel_cost[]" value="" class="form-control hotel-cost">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Customer Price</label>
@@ -338,6 +340,73 @@
         <script src="assets/libs/datatables/dataTables.min.js"></script>
         <script src="assets/libs/datatables/dataTables.bootstrap.min.js"></script>
         <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+        <script>
+    $(document).ready(function() {
+        
+        $(document).on('change', '.hotel-select', function() {
+            var selectedHotelId = $(this).val();
+            var $hotelRow = $(this).closest('.hotel-row');
+            var $roomType = $hotelRow.find('.room-type');
+            var $mealPlan = $hotelRow.find('.meal-plan');
+            var $childCategory = $hotelRow.find('.child-category');
+
+            $.ajax({
+                url: 'includes/ajax.php',
+                method: 'POST',
+                data: { hotel_id: selectedHotelId, gethotelterrifquot: true },
+                success: function(response) {
+                    var decoded = JSON.parse(response);
+                    $roomType.html(decoded.room_type);
+                    $mealPlan.html(decoded.meal_plan);
+                    $childCategory.html(decoded.child_category);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        function getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, $hotelRow) {
+            $.ajax({
+                url: 'includes/ajax.php',
+                method: 'POST',
+                data: {
+                    hotel_id: hotel_id,
+                    room_type: roomType,
+                    meal_plan: mealPlan,
+                    child_category: childCategory,
+                    getHotelActualPrice:true
+                },
+                success: function(response) {
+                    // var decoded = JSON.parse(response);
+                     $hotelRow.find('.hotel-cost').val(response);
+                     console.log(response);
+                    // $hotelRow.find('.meal-plan').html(decoded.meal_plan);
+                    // $hotelRow.find('.child-category').html(decoded.child_category);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    $(document).on('change', '.room-type, .meal-plan, .child-category', function() {
+            var $hotelRow = $(this).closest('.hotel-row');
+            var roomType = $hotelRow.find('.room-type').val();
+            var mealPlan = $hotelRow.find('.meal-plan').val();
+            var childCategory = $hotelRow.find('.child-category').val();
+            var hotel_id = $hotelRow.find('.hotel-select').val();
+
+            // Check if any of the values are not empty
+            if (roomType || mealPlan || childCategory) {
+                getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, $hotelRow);
+            }
+        });
+    });
+</script>
+
 
         <script>
     $(document).ready(function () {
