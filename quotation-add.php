@@ -132,6 +132,24 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">
+                                                            <label for="">Room Type </label>
+                                                            <select name="" id="">
+                                                                <option value="">Select Room Type</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">Meal Plan</label>
+                                                            <select name="" id="" class="form-select">
+                                                                <option value="">Select Meal Plan</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">Child Category</label>
+                                                            <select name="" id="" class="form-select">
+                                                                <option value="">Select Child Category</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
                                                             <label for="">Check In</label>
                                                             <input type="text" name="checkin[]" value="" class="form-control datepicker">
                                                         </div>
@@ -139,10 +157,7 @@
                                                             <label for="">Check Out</label>
                                                             <input type="text" name="checkout[]" value="" class="form-control datepicker">
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <label for="">Place</label>
-                                                            <input type="text" name="place[]" value="" class="form-control">
-                                                        </div>
+                                                        
                                                         <div class="col-md-2">
                                                             <label for="">No Of Room</label>
                                                             <input type="text" name="rooms[]" value="" class="form-control">

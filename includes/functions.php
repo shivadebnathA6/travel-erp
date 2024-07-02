@@ -162,7 +162,7 @@ return $return;
     }
     function getChildType($id){
         global $mysqli;
-        $return='Meal Plan Not Exist';
+        $return='No Child Type';
         $query=$mysqli->query("SELECT * FROM `tbl_master_child` WHERE `id`='$id'");
         if($query->num_rows > 0){
             $fetch=$query->fetch_assoc();
