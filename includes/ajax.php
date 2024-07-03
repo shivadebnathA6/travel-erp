@@ -32,17 +32,27 @@ if (isset($_POST['gethotelterrifquot']) && !empty($_POST['hotel_id'])) {
     echo json_encode($options);
 }
 
-if(isset($_POST['getHotelActualPrice'])&&!empty($_POST['room_type'])&&!empty($_POST['hotel_id'])&&!empty($_POST['meal_plan'])&&!empty($_POST['child_category'])){
+if(isset($_POST['getHotelActualPrice'])&&!empty($_POST['room_type'])&&!empty($_POST['hotel_id'])&&!empty($_POST['meal_plan'])){
     $hotel_id=$_POST['hotel_id'];
     $type_id=    $_POST['room_type'];
     $meal_id=    $_POST['meal_plan'];
     $child_id=    $_POST['child_category'];
     $gendate=input_date(date('d-m-Y'));
-    $sql="SELECT * FROM `master_hotel_tariff` WHERE `hotel_id`='$hotel_id' AND `type_id`='$type_id' AND `meal_id`='$meal_id' AND `child_id`='$child_id' AND ('$gendate' BETWEEN valid_from AND valid_to) LIMIT 1";
+    $sql="SELECT * FROM `master_hotel_tariff` WHERE `hotel_id`='$hotel_id' AND `type_id`='$type_id' AND `meal_id`='$meal_id' AND ('$gendate' BETWEEN valid_from AND valid_to) ";
+    if(!empty($child_id)){
+        $sql .=" AND `child_id`='$child_id' ";
+    }else{
+        $sql .=" AND `child_id`='' ";
+    }
+    $sql .=" LIMIT 1";
     $query=$mysqli->query($sql);
-   echo $count=$query->num_rows;
-
-   // $fetch=$query->fetch_assoc();
+    
+if($query->num_rows >0){
+    $fetch=$query->fetch_assoc();
+    echo $fetch['rate'];
+}else{
+    echo 0;
+}
 }
 
 

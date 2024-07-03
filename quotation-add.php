@@ -160,9 +160,17 @@
                                                             <input type="text" name="checkout[]" value="" class="form-control datepicker">
                                                         </div>
                                                         
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-2 d-none">
                                                             <label for="">No Of Room</label>
-                                                            <input type="text" name="rooms[]" value="" class="form-control">
+                                                            <input type="text" name="rooms[]" value="1" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">No Of Pax</label>
+                                                            <input type="text" name="pax[]" value="1" class="form-control pax">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="">No Of Child</label>
+                                                            <input type="text" name="child[]" value="1" class="form-control child">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Actual Price</label>
