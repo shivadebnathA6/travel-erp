@@ -153,11 +153,11 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Check In</label>
-                                                            <input type="text" name="checkin[]" value="" class="form-control datepicker">
+                                                            <input type="text" name="checkin[]" value="" class="form-control datepicker checkin">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Check Out</label>
-                                                            <input type="text" name="checkout[]" value="" class="form-control datepicker">
+                                                            <input type="text" name="checkout[]" value="" class="form-control datepicker checkout">
                                                         </div>
                                                         
                                                         <div class="col-md-2 d-none">
@@ -170,7 +170,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">No Of Child</label>
-                                                            <input type="text" name="child[]" value="1" class="form-control child">
+                                                            <input type="text" name="child[]" value="1" class="form-control child" readonly>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Actual Price</label>
@@ -350,7 +350,7 @@
         <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
         <script>
     $(document).ready(function() {
-        
+
         $(document).on('change', '.hotel-select', function() {
             var selectedHotelId = $(this).val();
             var $hotelRow = $(this).closest('.hotel-row');
@@ -377,7 +377,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        function getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, $hotelRow) {
+        function getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow) {
             $.ajax({
                 url: 'includes/ajax.php',
                 method: 'POST',
@@ -386,31 +386,70 @@
                     room_type: roomType,
                     meal_plan: mealPlan,
                     child_category: childCategory,
+                    check_in: check_in,
+                    check_out: check_out,
+                    no_pax: no_pax,
+                    no_child: no_child,
                     getHotelActualPrice:true
                 },
                 success: function(response) {
-                    // var decoded = JSON.parse(response);
+                
                      $hotelRow.find('.hotel-cost').val(response);
                      console.log(response);
-                    // $hotelRow.find('.meal-plan').html(decoded.meal_plan);
-                    // $hotelRow.find('.child-category').html(decoded.child_category);
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
         }
-    $(document).on('change', '.room-type, .meal-plan, .child-category', function() {
+
+        
+    $(document).on('change', '.room-type, .meal-plan, .child-category, .checkin, .checkout', function() {
             var $hotelRow = $(this).closest('.hotel-row');
             var roomType = $hotelRow.find('.room-type').val();
             var mealPlan = $hotelRow.find('.meal-plan').val();
             var childCategory = $hotelRow.find('.child-category').val();
             var hotel_id = $hotelRow.find('.hotel-select').val();
+            var no_pax = $hotelRow.find('.pax').val();
+            var no_child = $hotelRow.find('.child').val();
+            var check_in = $hotelRow.find('.checkin').val();
+            var check_out = $hotelRow.find('.checkout').val();
 
+            if(childCategory == ""){
+                    $(".child").attr("readonly", true); 
+                    $(".child").val("1");
+                } else{
+                    $(".child").attr("readonly", false);
+                }
+    
             // Check if any of the values are not empty
             if (roomType || mealPlan || childCategory) {
-                getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, $hotelRow);
+                getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow);
+
             }
+        });
+
+
+        $('.pax, .child, .check_in, .check_out').keyup(function() {
+            var $hotelRow = $(this).closest('.hotel-row');
+            var roomType = $hotelRow.find('.room-type').val();
+            var mealPlan = $hotelRow.find('.meal-plan').val();
+            var childCategory = $hotelRow.find('.child-category').val();
+            var hotel_id = $hotelRow.find('.hotel-select').val();
+            var no_pax = $hotelRow.find('.pax').val();
+            var no_child = $hotelRow.find('.child').val();
+            var check_in = $hotelRow.find('.checkin').val();
+            var check_out = $hotelRow.find('.checkout').val();
+            if(no_pax == "")
+            {
+                no_pax=0;
+            }
+            if(no_child == "")
+            {
+                no_child=0;
+            }
+           
+            getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow);
         });
     });
 </script>
@@ -418,6 +457,7 @@
 
         <script>
     $(document).ready(function () {
+        
         // Function to add new hotel row
         $('.add-hotel-btn').click(function (e) {
             e.preventDefault();
@@ -504,11 +544,14 @@
         // Reinitialize datepicker for all datepicker elements
         function reinitializeDatepicker() {
             $('.datepicker').each(function() {
+                
                 // $(this).datepicker('destroy'); // Destroy the current datepicker
                 $(this).removeClass('hasDatepicker');
                 $(this).removeAttr('id');
                 $(this).datepicker('destroy');
-                $(this).datepicker(); // Reinitialize the datepicker
+                $(this).datepicker({
+                    dateFormat:'yy/mm/dd'
+                });
             });
         }
         //calculate total
