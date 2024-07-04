@@ -87,35 +87,28 @@ $meal_idArr=$_POST['meal_id'];
         `valid_from`    = '$valid_from',
         `valid_to`    = '$valid_to',
         `meal_id`    = '$meal_id',";
-        if ($form_action == 'ADD') {
-            $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
-            $query = "INSERT INTO `master_hotel_tariff` SET $data";
-            $id    = $mysqli->insert_id;
-            $msg   = "Successfully Inserted";
-            $mysqli->query($query);
-        }
+
 
     }
-    $result = array('result' => true, 'redirect' => 'master-hotel-tariff', 'dhSession' => ["success" => $msg]);
     
    
 
-    // if ($form_action == 'ADD') {
-    //     $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
-    //     $query = "INSERT INTO `master_hotel_tariff` SET $data";
-    //     $id    = $mysqli->insert_id;
-    //     $msg   = "Successfully Inserted";
-    // } elseif ($form_action == 'UPDATE') {
-    //     $data .= "`updated_by` = '$user_id',`updated_at` = '$gen_date'";
-    //     $query = "UPDATE `master_hotel_tariff` SET $data WHERE `id`='$id'";
-    //     $msg   = "Successfully Updated";
-    // }
+     if ($form_action == 'ADD') {
+         $data .= "`created_by` = '$user_id',`created_at` = '$gen_date'";
+         $query = "INSERT INTO `master_hotel_tariff` SET $data";
+         $id    = $mysqli->insert_id;
+         $msg   = "Successfully Inserted";
+     } elseif ($form_action == 'UPDATE') {
+         $data .= "`updated_by` = '$user_id',`updated_at` = '$gen_date'";
+         $query = "UPDATE `master_hotel_tariff` SET $data WHERE `id`='$id'";
+         $msg   = "Successfully Updated";
+     }
 
-    // if ($mysqli->query($query)) {
-    //     $result = array('result' => true, 'redirect' => 'master-hotel-tariff', 'dhSession' => ["success" => $msg]);
-    // } else {
-    //     $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
-    // }
+     if ($mysqli->query($query)) {
+         $result = array('result' => true, 'redirect' => 'master-hotel-tariff', 'dhSession' => ["success" => $msg]);
+     } else {
+        $result = array('result' => false, 'dhSession' => ["success" => "Sorry !! Try Again"]);
+    }
 
     echo json_encode($result);
     exit;
@@ -135,10 +128,10 @@ if (isset($_REQUEST['delete']) && !empty($_REQUEST['id'])) {
 }
 
 if (isset($_REQUEST['e_id'])) {
-    $id         = filtervar($mysqli, $_REQUEST['e_id']);
+    $id  = filtervar($mysqli, $_REQUEST['e_id']);
     $get_result = $mysqli->query("SELECT * FROM `master_hotel_tariff` WHERE `id`='$id' ");
     if ($get_result->num_rows) {
-        $row    = $get_result->fetch_assoc();
+        $row  = $get_result->fetch_assoc();
         $action = "UPDATE";
     } else {
         echo '<script>window.history.back();</script>';
@@ -186,7 +179,7 @@ if (isset($_REQUEST['e_id'])) {
                             $field_query = $mysqli->query("SELECT * FROM `tbl_hotel` WHERE `is_deleted`=0");
                             while ($field_fetch = $field_query->fetch_assoc()) {
                             ?>
-                                <option value="<?php echo $field_fetch['id'] ?>" data-ho><?php echo $field_fetch['hotel_name']  ?></option>
+                                <option value="<?php echo $field_fetch['id'] ?>" <?php if(isset($row['hotel_id']) && $row['hotel_id'] == $field_fetch['id']) {?> selected<?php } ?>><?php echo $field_fetch['hotel_name']  ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -194,11 +187,11 @@ if (isset($_REQUEST['e_id'])) {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="">Valid From</label>
-                                <input type="text" class="form-control start_date" name="valid_from" id="valid_from" readonly placeholder="Enter Date" required>
+                                <input type="text" class="form-control start_date" name="valid_from" id="valid_from" readonly placeholder="Enter Date" value="<?php echo (isset($row['valid_from']) && !empty($row['valid_from']) ? $row['valid_from'] : '') ?>" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="">Valid To</label>
-                                <input type="text" class="form-control end_date" name="valid_to" id="valid_to" readonly placeholder="Enter Date" required>
+                                <input type="text" class="form-control end_date" name="valid_to" id="valid_to" readonly placeholder="Enter Date" value="<?php echo (isset($row['valid_to']) && !empty($row['valid_to']) ? $row['valid_to'] : '') ?>" required>
                             </div>
                         </div>
                     </div>
@@ -211,7 +204,7 @@ if (isset($_REQUEST['e_id'])) {
                                     $field_query = $mysqli->query("SELECT * FROM `tbl_master_rooms` WHERE `is_deleted`=0");
                                     while ($field_fetch = $field_query->fetch_assoc()) {
                                     ?>
-                                        <option value="<?php echo $field_fetch['id'] ?>" data-ho><?php echo $field_fetch['room_type']  ?></option>
+                                        <option value="<?php echo $field_fetch['id'] ?>" <?php if(isset($row['type_id']) && $row['type_id'] == $field_fetch['id']) {?> selected<?php } ?>><?php echo $field_fetch['room_type']  ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -222,7 +215,7 @@ if (isset($_REQUEST['e_id'])) {
                                     $field_query = $mysqli->query("SELECT * FROM `tbl_master_meals` WHERE `is_deleted`=0");
                                     while ($field_fetch = $field_query->fetch_assoc()) {
                                     ?>
-                                        <option value="<?php echo $field_fetch['id'] ?>" data-ho><?php echo $field_fetch['meal_plan']  ?></option>
+                                        <option value="<?php echo $field_fetch['id'] ?>" <?php if(isset($row['meal_id']) && $row['meal_id'] == $field_fetch['id']) {?> selected<?php } ?>><?php echo $field_fetch['meal_plan']  ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -233,17 +226,24 @@ if (isset($_REQUEST['e_id'])) {
                                     $field_query = $mysqli->query("SELECT * FROM `tbl_master_child` WHERE `is_deleted`=0");
                                     while ($field_fetch = $field_query->fetch_assoc()) {
                                     ?>
-                                        <option value="<?php echo $field_fetch['id'] ?>" data-ho><?php echo $field_fetch['category_type']  ?></option>
+                                        <option value="<?php echo $field_fetch['id'] ?>" <?php if(isset($row['child_id']) && $row['child_id'] == $field_fetch['id']) {?> selected<?php } ?>><?php echo $field_fetch['category_type']  ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" placeholder="RATE" name="rate[]" id="rate" required>
+                                <input type="text" class="form-control" placeholder="RATE" name="rate[]" id="rate" value="<?php echo (isset($row['rate']) && !empty($row['rate']) ? $row['rate'] : '') ?>" required>
                             </div>
+                            <?php 
+                            if($action == "ADD")
+                            {
+                            ?>
                             <div class="col-md-1 text-end">
                                 <button type="button" class="btn btn-sm btn-primary w-50 add_t"><i class="fa fa-plus"></i></button>
                                 <button type="button" class="btn btn-sm btn-danger w-50 remove_t" style="display:none;"><i class="fa fa-trash"></i></button>
                             </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="col-md-12 pt-4 text-center">
