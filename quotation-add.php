@@ -178,7 +178,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">Customer Price</label>
-                                                            <input type="text" name="hotel_customer_price[]" value="" class="form-control">
+                                                            <input type="text" name="hotel_customer_price[]" value="" class="form-control customer_price">
                                                         </div>
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-hotel-btn"><i class="fa fa-trash me-1"></i>remove</button>
@@ -469,6 +469,7 @@
             newHotelRow.find('.hotel-cost').val('');
             newHotelRow.find('.checkin').val('');
             newHotelRow.find('.checkout').val('');
+            newHotelRow.find('.customer_price').val('');
             newHotelRow.appendTo('.hotel-body');
             reinitializeDatepicker();
             checkRemoveButtons();
