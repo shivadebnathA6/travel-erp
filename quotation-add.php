@@ -416,10 +416,10 @@
             var check_out = $hotelRow.find('.checkout').val();
 
             if(childCategory == ""){
-                    $(".child").attr("readonly", true); 
-                    $(".child").val("1");
+                    $hotelRow.find(".child").attr("readonly", true); 
+                    $hotelRow.find(".child").val("1");
                 } else{
-                    $(".child").attr("readonly", false);
+                    $hotelRow.find(".child").attr("readonly", false);
                 }
     
             // Check if any of the values are not empty
@@ -430,7 +430,7 @@
         });
 
 
-        $('.pax, .child, .check_in, .check_out').keyup(function() {
+        $(document).on('keyup', '.pax, .child, .check_in, .check_out', function() {
             var $hotelRow = $(this).closest('.hotel-row');
             var roomType = $hotelRow.find('.room-type').val();
             var mealPlan = $hotelRow.find('.meal-plan').val();
@@ -462,8 +462,13 @@
         $('.add-hotel-btn').click(function (e) {
             e.preventDefault();
             var newHotelRow = $('.hotel-row').first().clone();
-            newHotelRow.find('input').val('');
+            newHotelRow.find('.child').attr("readonly", true); 
+            newHotelRow.find('.child').val("1"); 
+            newHotelRow.find('.pax').val("1"); 
             newHotelRow.find('select').val('');
+            newHotelRow.find('.hotel-cost').val('');
+            newHotelRow.find('.checkin').val('');
+            newHotelRow.find('.checkout').val('');
             newHotelRow.appendTo('.hotel-body');
             reinitializeDatepicker();
             checkRemoveButtons();
