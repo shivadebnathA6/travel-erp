@@ -125,7 +125,7 @@ function monthly_stats_booking(){
 }
 
 function get_guest_name($mysqli,$id){
-    $query=$mysqli->query("SELECT * FROM `guests` WHERE id='$id'");
+    $query=$mysqli->query("SELECT * FROM `tbl_guest` WHERE id='$id'");
     $fetch= $query->fetch_assoc();
     return $fetch["guest_name"];
     }

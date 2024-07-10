@@ -56,7 +56,7 @@
                </div>
                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">';
            (checkQuot($row['id']))?'': $row['action'].='<li><a class="dropdown-item" href="quotation-add?lead_id='.$row['id'].'">Add Quotation</a></li>';
-           (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item" href="quotation-add?e_id='.$quotation['id'].'">edit Quotation</a></li>':'';
+           (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item remove-quot-btn" data-bs-toggle="modal" data-bs-target="#del_quot_modal" data-id="'.$quotation['id'].'" href="javascript:void();">Delete Quotation</a></li>':'';
            (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item" href="">View Quotation</a></li>':'';
 
             $row['action'] .= '<li><a href="leads-entry?e_id=' . $row['id'] . '" type="button" class="dropdown-item" >Edit</a></li>';
@@ -99,15 +99,21 @@
         exit;
     }
 
-  
-
-
 ?>
 <!doctype html>
 <html lang="en">
 <head>
     <?php include_once 'includes/style.php' ?>
     <link rel="stylesheet" href="assets/libs/datatables/dataTables.bs4.css" />
+    <style>
+        hr.new1{
+            border-top: 2px dashed #fff;
+            margin: 0.4rem 0;
+        }
+        .theme-color {
+            color: #004cb9;
+        }
+    </style>    
 </head>
 <body>
     <?php include_once 'includes/header.php' ?>
@@ -136,12 +142,120 @@
     </div>
     </div>
 
+    <!-- Quotation Delete Modal -->
+    <div class="modal" id="del_quot_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">Are you sure?</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="px-4 py-1">
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold">Quotation ID:</span>
+                    <span class="text-muted" id="qid">#</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold">Guest Name:</span>
+                    <span class="text-muted" id="gname"></span>
+                </div>
+                <span class="theme-color">Quotation Summary</span>
+                <div class="mb-3">
+                    <hr class="new1">
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold">Hotel Total:</span>
+                    <span class="text-muted" id="htotal">0</span>
+                </div>  
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold">Cab Total:</span>
+                    <span class="text-muted" id="ctotal">0</span>
+                </div> 
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold">Addon Total:</span>
+                    <span class="text-muted" id="atotal">0</span>
+                </div> 
+                <div class="d-flex justify-content-between">
+                    <span class="font-weight-bold"><b>Grand Total:</b></span>
+                    <span class="text-muted"><b id="gtotal">5</b></span>
+                </div> 
+            </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="del-btn" data-id="">Delete</button>
+      </div>
+
+        </div>
+    </div>
+    </div>
+    <!-- End Quotation Delete Modal -->
+
     <?php include_once 'includes/footer.php' ?>
     <script src="assets/libs/jquery-ui/jquery-ui.js"></script>
     <script src="assets/libs/datatables/dataTables.min.js"></script>
     <script src="assets/libs/datatables/dataTables.bootstrap.min.js"></script>
 
     <script>
+        $(document).ready(function (){
+            $(document).on('click', '.remove-quot-btn', function (e) {
+                e.preventDefault();
+                var delId = $(this).data('id');
+                    $.ajax({
+                    url: 'includes/ajax_quot_details.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        delId: delId,
+                        quotdetails: true
+                    },
+                    success: function(response) {
+                        $("#qid").html("#"+response.quotId);
+                        $("#gname").html(response.gestId);
+                        $("#htotal").html(response.hotelTotal);
+                        $("#ctotal").html(response.cabTotal);
+                        $("#atotal").html(response.addonTotal);
+                        $("#gtotal").html(response.grandTotal);
+                        $("#del-btn").attr('data-id' , response.quotId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('click', '#del-btn', function (e) {
+                var delId = $(this).data('id');
+                if(delId){
+                    $.ajax({
+                        url: 'includes/ajax_quot_delete.php',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            delId: delId,
+                            quotdelete: true
+                        },
+                        success: function(response) {
+                            if(response.result == true)
+                            {
+                                alert("Deleted Successfully!!");
+                                location.reload();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+
         //--------------------------DATATABLE START--------------------------//
         $(document).ready(function (){
             var dataTable = $('#datatable').DataTable({
