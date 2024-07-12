@@ -13,9 +13,10 @@ $gen_date=input_date(date('d-m-Y'));
 $hotels=$_POST['hotel'];
 $checkins=$_POST['checkin'];
 $checkouts=$_POST['checkout'];
-$places=$_POST['place'];
+// $places=$_POST['place'];
 $roomss=$_POST['rooms'];
 $hotel_costs=$_POST['hotel_cost'];
+$hotel_customer_price=$_POST['hotel_customer_price'];
 // hotels array row end
 
 //cab array row
@@ -26,6 +27,7 @@ $cab_to=$_POST['cab_to'];
 $num_of_cab=$_POST['num_of_cab'];
 $passenger=$_POST['passenger'];
 $cab_cost=$_POST['cab_cost'];
+$cab_customer_price=$_POST['cab_customer_price'];
 // cab array row end
 
 //addon array row
@@ -33,6 +35,7 @@ $addon=$_POST['addon'];
 $addon_date=$_POST['addon_date'];
 $num_of_addon=$_POST['num_of_addon'];
 $addon_cost=$_POST['addon_cost'];
+$addon_customer_price=$_POST['addon_customer_price'];
 // addon array row end
 
 // totals part
@@ -70,7 +73,8 @@ for($h=0; $h <count($hotels); $h++){
     `checkin`= '$checkins[$h]',
     `checkout`= '$checkouts[$h]',
     `rooms`= '$roomss[$h]',
-    `cost`='$hotel_costs[$h]',";
+    `cost`='$hotel_costs[$h]',
+    `customer_price`='$hotel_customer_price[$h]', ";
     $tbl_hotel_voucher.="`created_by` = '$user_id',`created_at` = '$gen_date'";
     $tbl_hotel_voucher_query = $mysqli->query("INSERT INTO `tbl_voucher_hotel` SET $tbl_hotel_voucher");
     
@@ -84,7 +88,8 @@ for($i= 0; $i <count($cab); $i++){
  `to`='$cab_to[$i]',
  `no_cab`='$num_of_cab[$i]',
  `pax`='$passenger[$i]',
- `cost`='$cab_cost[$i]',";
+ `cost`='$cab_cost[$i]',
+  `customer_price`='$cab_customer_price[$i]', ";
  $tbl_voucher_cab.="`created_by` = '$user_id',`created_at` = '$gen_date'";
  $tbl_cab_voucher_query = $mysqli->query("INSERT INTO `tbl_voucher_cab` SET $tbl_voucher_cab");
 
@@ -96,7 +101,8 @@ $tbl_voucher_addon="`addon_id`='$addon[$a]',
     `quotation_id`='$quotation_id',
     `date`='$addon_date[$a]',
     `no_addon`='$num_of_addon[$a]',
-    `cost`='$addon_cost[$a]',";
+    `cost`='$addon_cost[$a]',
+    `customer_price`='$addon_customer_price[$a]', ";
     $tbl_voucher_addon.="`created_by` = '$user_id',`created_at` = '$gen_date'";
     $tbl_addon_voucher_query = $mysqli->query("INSERT INTO `tbl_voucher_addon` SET $tbl_voucher_addon");
 }

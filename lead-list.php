@@ -32,6 +32,7 @@
         $slno = 0;
         while($row = mysqli_fetch_assoc($diRecords)){
             $slno++;
+            $quot=checkQuot($row['id']);
             (checkQuot($row['id']))?$row['lead_id']='<p class="text-success">LEAD-'.$row['id'].'</p>':$row['lead_id']='LEAD-'.$row['id'];
             $quotation=checkQuot($row['id']);
             $row['guest_name']=getGuestName($row['guest_id']);
@@ -57,7 +58,7 @@
                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">';
            (checkQuot($row['id']))?'': $row['action'].='<li><a class="dropdown-item" href="quotation-add?lead_id='.$row['id'].'">Add Quotation</a></li>';
            (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item remove-quot-btn" data-bs-toggle="modal" data-bs-target="#del_quot_modal" data-id="'.$quotation['id'].'" href="javascript:void();">Delete Quotation</a></li>':'';
-           (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item" href="">View Quotation</a></li>':'';
+           (checkQuot($row['id']))?$row['action'].='<li><a class="dropdown-item" href="quotation-view?q_id='.$quot['id'].'">View Quotation</a></li>':'';
 
             $row['action'] .= '<li><a href="leads-entry?e_id=' . $row['id'] . '" type="button" class="dropdown-item" >Edit</a></li>';
 
