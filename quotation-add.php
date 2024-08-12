@@ -173,13 +173,10 @@
                                                             <input type="text" name="child[]" value="1" class="form-control child" readonly>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <label for="">Actual Price</label>
+                                                            <label for=""> Price</label>
                                                             <input style="background-color:#90EE90;" type="text" name="hotel_cost[]" value="" class="form-control hotel-cost">
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <label for="">Customer Price</label>
-                                                            <input type="text" name="hotel_customer_price[]" value="" class="form-control customer_price">
-                                                        </div>
+                                                        
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-hotel-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -203,9 +200,9 @@
                                                 </div>
                                                 <div class="card-body cab-body">
                                                     <div class="row g-3 cab-row">
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-3">
                                                             <label for="">Cab</label>
-                                                            <select name="cab[]" class="form-select">
+                                                            <select name="cab[]" class="form-select cabs">
                                                                 <option value="">Select Cab</option>
                                                                 <?php $field_sql=$mysqli->query("SELECT * FROM `tbl_cab` WHERE `is_deleted`=0");
                                                                  while($field_fetch=$field_sql->fetch_array()){
@@ -214,34 +211,29 @@
                                                                  <?php } ?>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-3">
                                                             <label for="">Date </label>
-                                                            <input type="text" name="cab_date[]" value="" class="form-control datepicker">
+                                                            <input type="text" name="cab_date[]" value="" class="form-control datepicker cab_date">
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <!-- <div class="col-md-2">
                                                             <label for="">From</label>
                                                             <input type="text" name="cab_from[]" value="" class="form-control">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="">To</label>
                                                             <input type="text" name="cab_to[]" value="" class="form-control">
-                                                        </div>
-                                                        <div class="col-md-1">
+                                                        </div> -->
+                                                        <div class="col-md-3">
                                                             <label for="">No Of Cab</label>
                                                             <input type="text" name="num_of_cab[]" value="" class="form-control">
                                                         </div>
-                                                        <div class="col-md-1">
-                                                            <label for="">Passenger</label>
-                                                            <input type="text" name="passenger[]" value="" class="form-control">
+                                                        
+                                                        <div class="col-md-3">
+                                                            <label for="">Price</label>
+                                                            <input type="text" name="cab_cost[]" value="" class="form-control cab_cost">
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <label for="">Cost</label>
-                                                            <input type="text" name="cab_cost[]" value="" class="form-control">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label for="">Customer Price</label>
-                                                            <input type="text" name="cab_customer_price[]" value="" class="form-control">
-                                                        </div>
+                                                        
+                                                        
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-cab-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -290,10 +282,7 @@
                                                             <label for="">Cost</label>
                                                             <input type="text" name="addon_cost[]" value="" class="form-control">
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <label for="">Customer Price</label>
-                                                            <input type="text" name="addon_customer_price[]" value="" class="form-control">
-                                                        </div>
+                                                       
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-addon-btn"><i class="fa fa-trash me-1"></i>remove</button>
                                                         </div>
@@ -556,7 +545,7 @@
                 $(this).removeAttr('id');
                 $(this).datepicker('destroy');
                 $(this).datepicker({
-                    dateFormat:'yy/mm/dd'
+                    dateFormat:'dd/mm/yy'
                 });
             });
         }
@@ -601,6 +590,48 @@
         reinitializeDatepicker();
         calculateTotals();
     });
+</script>
+<!------------------------------------- cab terrif -------------------------------->
+<script>
+ $('body').on('change', '.cabs', function() {
+    var cab = $(this); 
+    get_cab_price(cab)      
+});
+$('body').on('change', '.cab_date', function() {
+    var cab_date = $(this); 
+    var cab_body = cab_date.closest('.cab-body');
+    cab=cab_body.find('.cabs');
+    cab_val=cab.val();
+    if($.trim(cab_val) == ''){
+        alert('please select cab first');
+    }else{
+    get_cab_price(cab)     
+    } 
+});
+function get_cab_price(cab){
+cab_value=cab.val();
+var cab_body = cab.closest('.cab-body');
+cab_date=cab_body.find('.cab_date');
+cab_cost=cab_body.find('.cab_cost');
+ cab_date=cab_date.val();
+
+$.ajax({
+    url: 'includes/ajax.php',       
+    type: 'POST',          
+    data: { cab_id: cab_value,cab_date:cab_date,get_cab_price:true },      
+    success: function(response) {
+        // Handle the successful response here
+        console.log(response)
+        cab_cost.val(response);
+        
+    },
+    error: function(xhr, status, error) {
+        // Handle any errors here
+        console.log('error')
+        console.error('AJAX request failed:', status, error);
+    }
+});
+}
 </script>
     </body>
 
