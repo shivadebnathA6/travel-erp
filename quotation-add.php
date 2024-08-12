@@ -127,7 +127,7 @@
                                                                 <?php $field_sql=$mysqli->query("SELECT * FROM `tbl_hotel` WHERE `is_deleted`=0");
                                                                  while($field_fetch=$field_sql->fetch_array()){
                                                                  ?>
-                                                                    <option value="<?php echo $field_fetch['id']  ?>"><?php echo $field_fetch['hotel_name'] ?></option>
+                                                                    <option value="<?php echo $field_fetch['id']  ?>"><?php echo $field_fetch['hotel_name'] ?>(<?php echo $field_fetch['hotel_loc'] ?>)</option>
                                                                  <?php } ?>
                                                             </select>
                                                         </div>
@@ -145,12 +145,12 @@
                                                                 <option value="">Hotel Not Selected</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <!-- <div class="col-md-2">
                                                             <label for="">Child Category</label>
                                                             <select name="child_category[]" id="child_category" class="form-select child-category">
                                                                 <option value="">Hotel Not Selected</option>
                                                             </select>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="col-md-2">
                                                             <label for="">Check In</label>
                                                             <input type="text" name="checkin[]" value="" class="form-control datepicker checkin">
@@ -160,17 +160,17 @@
                                                             <input type="text" name="checkout[]" value="" class="form-control datepicker checkout">
                                                         </div>
                                                         
-                                                        <div class="col-md-2 d-none">
+                                                        <div class="col-md-2 ">
                                                             <label for="">No Of Room</label>
-                                                            <input type="text" name="rooms[]" value="1" class="form-control">
+                                                            <input type="text" name="rooms[]" value="1" class="form-control rooms">
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-2 d-none">
                                                             <label for="">No Of Pax</label>
-                                                            <input type="text" name="pax[]" value="1" class="form-control pax">
+                                                            <input type="text" name="pax[]" value="" class="form-control pax">
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-2 d-none">
                                                             <label for="">No Of Child</label>
-                                                            <input type="text" name="child[]" value="1" class="form-control child" readonly>
+                                                            <input type="text" name="child[]" value="" class="form-control child" readonly>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for=""> Price</label>
@@ -225,14 +225,14 @@
                                                         </div> -->
                                                         <div class="col-md-3">
                                                             <label for="">No Of Cab</label>
-                                                            <input type="text" name="num_of_cab[]" value="" class="form-control">
+                                                            <input type="text" name="num_of_cab[]" value="" class="form-control num_of_cab">
                                                         </div>
                                                         
                                                         <div class="col-md-3">
                                                             <label for="">Price</label>
                                                             <input type="text" name="cab_cost[]" value="" class="form-control cab_cost">
                                                         </div>
-                                                        
+                                                       
                                                         
                                                         <div class="col-md-12 text-end">
                                                             <button type="button" class="btn btn-sm btn-danger remove-cab-btn"><i class="fa fa-trash me-1"></i>remove</button>
@@ -292,6 +292,9 @@
                                         </div>
 
                                         <!-- calculations -->
+                                         <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-info" onclick="calculateTotals()">Calculate Total</button>
+                                         </div>
                                         <div class="col-md-4">
                                             <label for="">Hotel Total</label>
                                             <input type="text" name="hotel_total" id="hotel_total" class="form-control" readonly>
@@ -338,6 +341,36 @@
         <script src="assets/libs/datatables/dataTables.bootstrap.min.js"></script>
         <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
         <script>
+      // Function to calculate totals
+      function calculateTotals() {
+            let hotelTotal = 0;
+            let cabTotal = 0;
+            let addonTotal = 0;
+
+            $('.hotel-body .hotel-row').each(function() {
+                let cost = parseFloat($(this).find('input[name="hotel_cost[]"]').val()) || 0;
+                hotelTotal += cost;
+            });
+
+            $('.cab-body .cab-row').each(function() {
+                let cost = parseFloat($(this).find('input[name="cab_cost[]"]').val()) || 0;
+                cabTotal += cost;
+            });
+
+            $('.addon-body .addon-row').each(function() {
+                let cost = parseFloat($(this).find('input[name="addon_cost[]"]').val()) || 0;
+                addonTotal += cost;
+            });
+
+            $('#hotel_total').val(hotelTotal.toFixed(2));
+            $('#cab_total').val(cabTotal.toFixed(2));
+            $('#addon_total').val(addonTotal.toFixed(2));
+
+            let grandTotal = hotelTotal + cabTotal + addonTotal;
+            $('#grand_total').val(grandTotal.toFixed(2));
+        }
+    </script>
+        <script>
     $(document).ready(function() {
 
         $(document).on('change', '.hotel-select', function() {
@@ -366,7 +399,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        function getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow) {
+        function getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, $hotelRow,rooms) {
             $.ajax({
                 url: 'includes/ajax.php',
                 method: 'POST',
@@ -377,9 +410,10 @@
                     child_category: childCategory,
                     check_in: check_in,
                     check_out: check_out,
-                    no_pax: no_pax,
-                    no_child: no_child,
-                    getHotelActualPrice:true
+                    // no_pax: no_pax,
+                    // no_child: no_child,
+                    getHotelActualPrice:true,
+                    rooms:rooms
                 },
                 success: function(response) {
                 
@@ -393,16 +427,17 @@
         }
 
         
-    $(document).on('change', '.room-type, .meal-plan, .child-category, .checkin, .checkout', function() {
+    $(document).on('change', '.room-type, .meal-plan, .child-category, .checkin, .checkout,.rooms', function() {
             var $hotelRow = $(this).closest('.hotel-row');
             var roomType = $hotelRow.find('.room-type').val();
             var mealPlan = $hotelRow.find('.meal-plan').val();
             var childCategory = $hotelRow.find('.child-category').val();
             var hotel_id = $hotelRow.find('.hotel-select').val();
-            var no_pax = $hotelRow.find('.pax').val();
-            var no_child = $hotelRow.find('.child').val();
+            // var no_pax = $hotelRow.find('.pax').val();
+            // var no_child = $hotelRow.find('.child').val();
             var check_in = $hotelRow.find('.checkin').val();
             var check_out = $hotelRow.find('.checkout').val();
+            var rooms = $hotelRow.find('.rooms').val();
 
             if(childCategory == ""){
                     $hotelRow.find(".child").attr("readonly", true); 
@@ -413,22 +448,23 @@
     
             // Check if any of the values are not empty
             if (roomType || mealPlan || childCategory) {
-                getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow);
+                getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, $hotelRow,rooms);
 
             }
         });
 
 
-        $(document).on('keyup', '.pax, .child, .check_in, .check_out', function() {
+        $(document).on('keyup', '.pax, .child, .check_in, .check_out,.rooms', function() {
             var $hotelRow = $(this).closest('.hotel-row');
             var roomType = $hotelRow.find('.room-type').val();
             var mealPlan = $hotelRow.find('.meal-plan').val();
             var childCategory = $hotelRow.find('.child-category').val();
             var hotel_id = $hotelRow.find('.hotel-select').val();
-            var no_pax = $hotelRow.find('.pax').val();
-            var no_child = $hotelRow.find('.child').val();
+            // var no_pax = $hotelRow.find('.pax').val();
+            // var no_child = $hotelRow.find('.child').val();
             var check_in = $hotelRow.find('.checkin').val();
             var check_out = $hotelRow.find('.checkout').val();
+            var rooms = $hotelRow.find('.rooms').val();
             if(no_pax == "")
             {
                 no_pax=0;
@@ -438,7 +474,7 @@
                 no_child=0;
             }
            
-            getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, no_pax, no_child, $hotelRow);
+            getHotelActualPrice(hotel_id,roomType, mealPlan, childCategory, check_in, check_out, $hotelRow,rooms);
         });
     });
 </script>
@@ -446,7 +482,11 @@
 
         <script>
     $(document).ready(function () {
-        
+        //calculate total
+        $('body').on('input change', 'input, select', function() {
+                calculateTotals();
+                console.log('exe');
+                        });
         // Function to add new hotel row
         $('.add-hotel-btn').click(function (e) {
             e.preventDefault();
@@ -549,36 +589,8 @@
                 });
             });
         }
-        //calculate total
-
-         // Function to calculate totals
-         function calculateTotals() {
-            let hotelTotal = 0;
-            let cabTotal = 0;
-            let addonTotal = 0;
-
-            $('.hotel-body .hotel-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="hotel_customer_price[]"]').val()) || 0;
-                hotelTotal += cost;
-            });
-
-            $('.cab-body .cab-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="cab_customer_price[]"]').val()) || 0;
-                cabTotal += cost;
-            });
-
-            $('.addon-body .addon-row').each(function() {
-                let cost = parseFloat($(this).find('input[name="addon_customer_price[]"]').val()) || 0;
-                addonTotal += cost;
-            });
-
-            $('#hotel_total').val(hotelTotal.toFixed(2));
-            $('#cab_total').val(cabTotal.toFixed(2));
-            $('#addon_total').val(addonTotal.toFixed(2));
-
-            let grandTotal = hotelTotal + cabTotal + addonTotal;
-            $('#grand_total').val(grandTotal.toFixed(2));
-        }
+        
+         
         $(document).on('input', 'input[name="hotel_customer_price[]"], input[name="cab_customer_price[]"], input[name="addon_customer_price[]"]', function() {
             calculateTotals();
         });
@@ -593,13 +605,27 @@
 </script>
 <!------------------------------------- cab terrif -------------------------------->
 <script>
+$('body').on('change', '.num_of_cab', function() {
+    var num_of_cab = $(this); 
+    var cab_body = num_of_cab.closest('.cab-row');
+    cab=cab_body.find('.cabs');
+    cab_val=cab.val();
+    if($.trim(cab_val) == ''){
+        alert('please select cab first');
+    }else{
+    get_cab_price(cab)     
+    } 
+});
+
+
+
  $('body').on('change', '.cabs', function() {
     var cab = $(this); 
     get_cab_price(cab)      
 });
 $('body').on('change', '.cab_date', function() {
     var cab_date = $(this); 
-    var cab_body = cab_date.closest('.cab-body');
+    var cab_body = cab_date.closest('.cab-row');
     cab=cab_body.find('.cabs');
     cab_val=cab.val();
     if($.trim(cab_val) == ''){
@@ -610,15 +636,17 @@ $('body').on('change', '.cab_date', function() {
 });
 function get_cab_price(cab){
 cab_value=cab.val();
-var cab_body = cab.closest('.cab-body');
+var cab_body = cab.closest('.cab-row');
 cab_date=cab_body.find('.cab_date');
 cab_cost=cab_body.find('.cab_cost');
+num_of_cab=cab_body.find('.num_of_cab');
  cab_date=cab_date.val();
+ nos=num_of_cab.val();
 
 $.ajax({
     url: 'includes/ajax.php',       
     type: 'POST',          
-    data: { cab_id: cab_value,cab_date:cab_date,get_cab_price:true },      
+    data: { cab_id: cab_value,cab_date:cab_date,nos:nos,get_cab_price:true },      
     success: function(response) {
         // Handle the successful response here
         console.log(response)

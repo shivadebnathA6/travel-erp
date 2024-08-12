@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency Quotation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background: linear-gradient(to right, #ffffff, #f8f9fa);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    padding: 30px;
+    background: #007bff;
+    color: #ffffff;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.card p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.card a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+.quotation-tables {
+    margin-top: 20px;
+}
+
+.quotation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.quotation-table th,
+.quotation-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+}
+
+.quotation-table th {
+    background: #007bff;
+    color: #ffffff;
+    font-size: 1.1em;
+}
+
+.quotation-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.total-package {
+    background: #e9f7f9;
+    border: 1px solid #b0e1e7;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.total-package h2 {
+    font-size: 1.5em;
+    margin-top: 0;
+    color: #007bff;
+}
+
+.total-package p {
+    margin: 10px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #007bff;
+    color: #ffffff;
+    border-radius: 0 0 12px 12px;
+}
+
+</style>
+<body>
+    <div class="container">
+        <header>
+            <h1>Travel Agency Quotation</h1>
+        </header>
+        <main>
+            <div class="details">
+                <div class="company-details card">
+                    <h2>Company Details</h2>
+                    <p><strong>Travel Agency Inc.</strong></p>
+                    <p>1234 Travel Lane</p>
+                    <p>Adventure City, AC 56789</p>
+                    <p>Email: <a href="mailto:contact@travelagency.com">contact@travelagency.com</a></p>
+                    <p>Phone: <a href="tel:+11234567890">(123) 456-7890</a></p>
+                </div>
+                <div class="client-details card">
+                    <h2>Client Details</h2>
+                    <p><strong>John Doe</strong></p>
+                    <p>5678 Client Road</p>
+                    <p>Vacation Town, VT 98765</p>
+                    <p>Email: <a href="mailto:johndoe@example.com">johndoe@example.com</a></p>
+                    <p>Phone: <a href="tel:+19876543210">(987) 654-3210</a></p>
+                </div>
+            </div>
+
+            <!-- Total Package Price Section -->
+            <div class="total-package card">
+                <h2><strong>Total Price :</strong>₹ 10000</h2>
+              
+                
+            </div>
+
+            <div class="quotation-tables">
+                <h2>Quotation Details</h2>
+                
+                <table class="quotation-table">
+                    <thead>
+                        <tr>
+                            <th>Hotel</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Luxury Suite</td>
+                            <td>Spacious room with a king-sized bed and a beautiful view.</td>
+                            <td>$150 per night</td>
+                        </tr>
+                        <tr>
+                            <td>Standard Room</td>
+                            <td>Comfortable room with all the essential amenities.</td>
+                            <td>$100 per night</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="quotation-table">
+                    <thead>
+                        <tr>
+                            <th>Cab</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Airport Transfer</td>
+                            <td>Pickup and drop-off service from the airport.</td>
+                            <td>$30</td>
+                        </tr>
+                        <tr>
+                            <td>Daily Hire</td>
+                            <td>Daily rental of a car with a driver.</td>
+                            <td>$80 per day</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="quotation-table">
+                    <thead>
+                        <tr>
+                            <th>Add-Ons</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>City Tour</td>
+                            <td>A guided tour of the main attractions in the city.</td>
+                            <td>$50</td>
+                        </tr>
+                        <tr>
+                            <td>Breakfast Package</td>
+                            <td>Includes breakfast for each day of your stay.</td>
+                            <td>$20 per day</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 Travel Agency Inc. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
