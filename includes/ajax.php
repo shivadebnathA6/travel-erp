@@ -97,5 +97,26 @@ if(isset($_POST['getHotelActualPrice'])&&!empty($_POST['room_type'])&&!empty($_P
     
 }
 
+if(isset($_POST['get_cab_price'])&&isset($_POST['cab_id'])&&isset($_POST['cab_date'])){
+    $cab_id=$_POST['cab_id'];
+    $cab_date=$_POST['cab_date'];
+    $price=0;
+    $sql="SELECT * FROM `master_cab_tariff` WHERE id='$cab_id' ";
+    if(!empty($cab_date)){
+        $cab_date=input_date($cab_date);
+        $sql.="AND ('$cab_date' BETWEEN valid_from AND valid_to) ";
+    }
+    $query=$mysqli->query($sql);
+    $count=$query->num_rows;
+    if($count>0){
+        $fetch=$query->fetch_array();
+        $price='dsf';
+    }else{
+        $price=0;
+    }
+    return $price;
+
+}
+
 
 ?>
